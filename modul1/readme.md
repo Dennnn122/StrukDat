@@ -1,5 +1,5 @@
 
-# <h1 align="center">Laporan Praktikum Modul X <br> Nama Modul</h1>
+# <h1 align="center">Laporan Praktikum Modul 1 <br> Pengenalan C++</h1>
 <p align="center">DENNA WAHYU SETYOBUDI - 103112430206</p>
 
 ## Dasar Teori
