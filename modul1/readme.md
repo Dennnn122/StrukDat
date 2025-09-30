@@ -252,8 +252,7 @@ int main(){
 ```
 
 > Output
-> ![Screenshot bagian x](output/screenshot_soal1.png)
-> %% Untuk mencantumkan screenshot, tidak boleh ada spasi di urlnya `()`, penamaan file bebas asal gak sara dan mudah dipahami aja,, dan jangan lupa hapus komen ini yah%%
+> ![output](output/un1.png)
 
 Pada program diatas kita menginputkan 2 variabel bertipe data float sebagai inputan, dengan menggunakan rumus aritmatika pada cout kita mendapatkan outputnya yaitu hasil penjumlahan, pengurangan, perkalian dan pembagian dari 2 avriabel tsb. pada pembagian jika y bukan 0 maka akan berjalan, jika y adalah 0 makan outputnya berupa teks.
 
@@ -304,7 +303,7 @@ int main() {
 ```
 
 > Output
-> ![Screenshot bagian x](output/screenshot_soal2A.png)
+> ![output](output/un2.png)
 
 Pada program diatas kita membuat inputan angka menjadi output teks dari angka yang kita inputkan, dengan menggunakan string array kita membuat sebuah pola untuk bilangan satuan, belasan, puluhan. lalu menggunakan if-else untuk mengecek inputan kita, inputan berupa variabel int angka. output program ini berupa teks dari nilai angka yang kita inputkan
 
@@ -335,7 +334,7 @@ int main() {
 ```
 
 > Output
-> ![Screenshot bagian x](output/screenshot_soal2B.png)
+> ![output](output/un3.png)
 
 Pada program diatas kita harus membuat sebuah pola cermin, inputan program adalah variabel bertipe data int n. lalu mencetak baris demi baris berisi urutan angka menurun di sebelah kiri, tanda * di tengah, dan urutan angka menaik di sebelah kanan. Setelah setiap baris, jumlah angka berkurang satu dan diberi spasi tambahan di depan sehingga membentuk segitiga simetris.
 
