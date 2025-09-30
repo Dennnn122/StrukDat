@@ -209,6 +209,7 @@ int main()
 ```
 ### soal 6
 
+test
 ```go
 #include <iostream>
 using namespace std;
@@ -223,7 +224,6 @@ int main()
 }
 
 ```
-test
 
 ## Unguided
 
