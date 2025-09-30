@@ -26,6 +26,8 @@ int main()
     return 0;
 }
 ```
+> Output
+> ![output](output/g1.png)
 ### soal 2
 
 fungsi
@@ -78,6 +80,8 @@ int main()
     return 0;
 }
 ```
+> Output
+> ![output](output/g2.png)
 ### soal 3
 
 kondisi
@@ -138,6 +142,8 @@ int main()
     return 0;
 }
 ```
+> Output
+> ![output](output/g3.png)
 ### soal 4
 
 struck
@@ -174,6 +180,8 @@ int main() {
 }
 
 ```
+> Output
+> ![output](output/g5.png)
 ### soal 5
 
 perulangan
@@ -207,6 +215,8 @@ int main()
     return 0;
 }
 ```
+> Output
+> ![output](output/g4.png)
 ### soal 6
 
 test
@@ -224,6 +234,8 @@ int main()
 }
 
 ```
+> Output
+> ![output](output/g6.png)
 
 ## Unguided
 
