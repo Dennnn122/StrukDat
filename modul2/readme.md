@@ -75,28 +75,48 @@ Buatlah sebuah program untuk melakukan transpose pada sebuah matriks persegi ber
 ```go
 #include <iostream>
 using namespace std;
-int main(){
-    float x, y;
-    cout << "masukan 2 angka :";
-    cin >> x >> y;
 
-    cout << "hasil penjumlahan :"<< x + y << endl;
-    cout << "hasil pengurangan :"<< x - y << endl;
-    cout << "Hasil Perkalian : " << x * y << endl;
-    if (y != 0)
-        cout << "Hasil Pembagian : " << x / y << endl;
-    else
-        cout << "Pembagian tidak bisa dilakukan (y = 0)" << endl;
+int main() {
+    int matriks[3][3] = {
+        {1, 2, 3},
+        {4, 5, 6},
+        {7, 8, 9}
+    };
+
+    int transpose[3][3];
+
+    for (int i = 0; i < 3; i++) {
+        for (int j = 0; j < 3; j++) {
+            transpose[j][i] = matriks[i][j];
+        }
+    }
+
+    cout << "Matriks Awal:" << endl;
+    for (int i = 0; i < 3; i++) {
+        for (int j = 0; j < 3; j++) {
+            cout << matriks[i][j] << " ";
+        }
+        cout << endl;
+    }
+
+    cout << endl;
+
+    cout << "Matriks Hasil Transpose:" << endl;
+    for (int i = 0; i < 3; i++) {
+        for (int j = 0; j < 3; j++) {
+            cout << transpose[i][j] << " ";
+        }
+        cout << endl;
+    }
 
     return 0;
-
 }
 ```
 
 > Output
 > ![output](output/un1.png)
 
-Pada program diatas kita menginputkan 2 variabel bertipe data float sebagai inputan, dengan menggunakan rumus aritmatika pada cout kita mendapatkan outputnya yaitu hasil penjumlahan, pengurangan, perkalian dan pembagian dari 2 avriabel tsb. pada pembagian jika y bukan 0 maka akan berjalan, jika y adalah 0 makan outputnya berupa teks.
+Pada program diatas kita harus melalukan transpose pada sebuah matriks 3x3. Dengan melakukan inisiasi isi matriks awal, lalu membuat matriks kosong yang nantinya akan berisi hasil transpose. Kita menggunakan 2 loop untuk mengubah baris jadi kolom, dan kolom jadi baris. Lalu menampilkan output yaitu matriks awal menggunakan 2 loop untuk mencetak matriks asli tiap baris. Lalu menampilkan output kedua yaitu Matriks Hasil Transpose menggunakan 2 loop juga untuk mencetak matriks tiap baris.
 
 ### Soal 2
 
@@ -105,48 +125,26 @@ Buatlah program yang menunjukkan penggunaan call by reference. Buat sebuah prose
 #include <iostream>
 using namespace std;
 
-string numberToWords(int n) {
-    string satuan[10] = {"nol","satu","dua","tiga","empat","lima",
-                        "enam","tujuh","delapan","sembilan"};
-    string belasan[10] = {"sepuluh","sebelas","dua belas","tiga belas",
-                        "empat belas","lima belas","enam belas",
-                        "tujuh belas","delapan belas","sembilan belas"};
-    string puluhan[10] = {"","", "dua puluh","tiga puluh","empat puluh",
-                        "lima puluh","enam puluh","tujuh puluh",
-                        "delapan puluh","sembilan puluh"};
-
-    if (n < 10) return satuan[n];
-    else if (n < 20) return belasan[n - 10];
-    else if (n < 100) {
-        int p = n / 10;   
-        int s = n % 10;   
-        if (s == 0) return puluhan[p];
-        else return puluhan[p] + " " + satuan[s];
-    } else if (n == 100) {
-        return "seratus";
-    }
-    return "tidak valid";
+void kuadrat(int &x) {
+    x = x * x; 
 }
 
 int main() {
-    int angka;
-    cout << "Masukkan angka (0 - 100): ";
-    cin >> angka;
+    int angka = 5; 
+    cout << "Nilai awal: " << angka << endl;
 
-    if (angka < 0 || angka > 100) {
-        cout << "Angka di luar jangkauan" << endl;
-    } else {
-        cout << angka << " : " << numberToWords(angka) << endl;
-    }
+    kuadrat(angka); 
 
+    cout << "Nilai setelah dikuadratkan: " << angka << endl;
     return 0;
 }
+
 ```
 
 > Output
 > ![output](output/un2.png)
 
-Pada program diatas kita membuat inputan angka menjadi output teks dari angka yang kita inputkan, dengan menggunakan string array kita membuat sebuah pola untuk bilangan satuan, belasan, puluhan. lalu menggunakan if-else untuk mengecek inputan kita, inputan berupa variabel int angka. output program ini berupa teks dari nilai angka yang kita inputkan
+Pada program diatas kita membuat prosedur penggunaan call by reference untuk mengkuadratkan sebuah bilangan, dimana pada program ini kita inisiasikan angka = 5. Prosedur kuadrat dengan parameter &x berisi rumus kuadrat yaitu x = x * x. Lalu output pertama yaitu menunjukan nilai awal yaitu angka 5, lalu kita panggil prosedur kuadrat dari angka. Kita mendapat output kedua yaitu nilai setelah dikuadratkan.
 
 ## Referensi
 
