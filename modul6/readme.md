@@ -1,9 +1,9 @@
-# <h1 align="center">Laporan Praktikum Modul 4 <br> Singly Linked List (Bagian Pertama)</h1>
+# <h1 align="center">Laporan Praktikum Modul 6 <br> Doubly Linked List (Bagian Pertama)</h1>
 <p align="center">DENNA WAHYU SETYOBUDI - 103112430206</p>
 
 ## Dasar Teori
 
-Pada materi ini menjelaskan tentang Singly linked list. Linked List adalah salah satu bentuk struktur data, berisi kumpulan data (node) yang tersusun secara sekuensial, saling sambung - menyambung, dinamis. Dalam istilah ilustrasi di dunia nyata Linked List sering disebut juga Senarai Berantai. Dalam Konsepnya Linked List saling terhubung dengan bantuan variabel pointer. Jadi masing-masing data dalam Linked List disebut dengan node (simpul) yang menempati alokasi memori secara dinamis dan biasanya berupa struct yang terdiri dari beberapa field. 
+Pada materi ini menjelaskan tentang doubly linked list. doubly linked List merupakan struktur data yang lebih kompleks daripada single linked list, tetapi menawarkan beberapa keuntungan. Keuntungan utama dari daftar tertaut ganda adalah memungkinkan traversal daftar yang efisien di kedua arah. Hal ini karena setiap simpul dalam daftar berisi penunjuk ke simpul sebelumnya dan penunjuk ke simpul berikutnya. Hal ini memungkinkan penyisipan dan penghapusan simpul dari daftar dengan cepat dan mudah, serta traversal daftar yang efisien di kedua arah.
 
 ## Guided
 
@@ -13,141 +13,202 @@ Pada materi ini menjelaskan tentang Singly linked list. Linked List adalah salah
 #include <iostream>
 using namespace std;
 
-// Struktur Node
+//struktur node
 struct Node {
     int data;
+    Node* prev;
     Node* next;
 };
 
-// Pointer awal
+//pointer global
 Node* head = nullptr;
+Node* tail = nullptr;
 
-// Fungsi untuk membuat node baru
-Node* createNode(int data) {
+void insertDepan(int data) {
+    Node* newNode = new Node();
+    newNode->data = data;
+    newNode->prev = nullptr;
+    newNode->next = head;
+
+    if(head != nullptr)
+        head->prev = newNode;
+    else
+        tail = newNode; //jika list kosong
+    
+    head = newNode;
+    cout << "data" << data << "berhasil ditambahkan di depan.\n";
+}
+
+void insertBelakang(int data){
     Node* newNode = new Node();
     newNode->data = data;
     newNode->next = nullptr;
-    return newNode;
+    newNode->prev = tail;
+
+    if (tail != nullptr)
+        tail->next = newNode;
+    else 
+        head = newNode; //jika list kosong
+    
+    tail = newNode;
+    cout << "data" << data << "berhasil ditambahkan di belakang. \n";
 }
 
-// ========== INSERT FUNCTION ==========
-void insertDepan(int data) {
-    Node* newNode = createNode(data);
-    newNode->next = head;
-    head = newNode;
-    cout << "Data " << data << " berhasil ditambahkan di depan.\n";
+void insertSetelah(int target, int data){
+Node* current = head;
+while (current != nullptr && current->data != target)
+    current = current->next;
+if (current == nullptr) {
+    cout << "data" << target << "tidak ditemukan.\n";
+    return;
 }
 
-void insertBelakang(int data) {
-    Node* newNode = createNode(data);
+Node* newNode = new Node();
+newNode->data = data;
+newNode->next = current->next;
+newNode->prev = current;
+
+if (current->next !=nullptr)
+    current->prev = newNode;
+else
+    tail = newNode;
+
+current->next = newNode;
+cout << "data" << data << "berhasil disisipkan setelah" << target <<".\n";
+}
+
+void hapusDepan(){
     if (head == nullptr) {
-        head = newNode;
-    } else {
-        Node* temp = head;
-        while (temp->next != nullptr) {
-            temp = temp->next;
-        }
-        temp->next = newNode;
-    }
-    cout << "Data " << data << " berhasil ditambahkan di belakang.\n";
-}
-
-void insertSetelah(int target, int dataBaru) {
-    Node* temp = head;
-    while (temp != nullptr && temp->data != target) {
-        temp = temp->next;
-    }
-
-    if (temp == nullptr) {
-        cout << "Data " << target << " tidak ditemukan!\n";
-    } else {
-        Node* newNode = createNode(dataBaru);
-        newNode->next = temp->next;
-        temp->next = newNode;
-        cout << "Data " << dataBaru << " berhasil disisipkan setelah " << target << ".\n";
-    }
-}
-
-// ========== DELETE FUNCTION ==========
-void hapusNode(int data) {
-    if (head == nullptr) {
-        cout << "List kosong!\n";
+        cout << "List kosong, tidak ada yang dihapus.\n";
         return;
     }
 
     Node* temp = head;
-    Node* prev = nullptr;
+    head = head->next;
 
-    // Jika data di node pertama
-    if (temp != nullptr && temp->data == data) {
-        head = temp->next;
-        delete temp;
-        cout << "Data " << data << " berhasil dihapus.\n";
-        return;
-    }
+    if (head != nullptr)
+        head->prev = nullptr;
+    else
+        tail = nullptr;
 
-    // Cari node yang akan dihapus
-    while (temp != nullptr && temp->data != data) {
-        prev = temp;
-        temp = temp->next;
-    }
-
-    // Jika data tidak ditemukan
-    if (temp == nullptr) {
-        cout << "Data " << data << " tidak ditemukan!\n";
-        return;
-    }
-
-    prev->next = temp->next;
+    cout << "Data " << temp->data << " di depan berhasil dihapus.\n";
     delete temp;
-    cout << "Data " << data << " berhasil dihapus.\n";
 }
 
-// ========== UPDATE FUNCTION ==========
-void updateNode(int dataLama, int dataBaru) {
-    Node* temp = head;
-    while (temp != nullptr && temp->data != dataLama) {
-        temp = temp->next;
-    }
-
-    if (temp == nullptr) {
-        cout << "Data " << dataLama << " tidak ditemukan!\n";
-    } else {
-        temp->data = dataBaru;
-        cout << "Data " << dataLama << " berhasil diupdate menjadi " << dataBaru << ".\n";
-    }
-}
-
-// ========== DISPLAY FUNCTION ==========
-void tampilkanList() {
-    if (head == nullptr) {
-        cout << "List kosong!\n";
+void hapusBelakang(){
+    if (tail == nullptr) {
+        cout << "List Kosong \n";
         return;
     }
 
-    Node* temp = head;
-    cout << "Isi Linked List: ";
-    while (temp != nullptr) {
-        cout << temp->data << " -> ";
-        temp = temp->next;
-    }
-    cout << "NULL\n";
+    Node* temp =tail;
+    tail= tail->prev;
+
+    if(tail != nullptr)
+        tail->next = nullptr;
+    else
+        head = nullptr;
+    
+    cout << "data" << temp->data <<"dihapus dari belakang.\n";
+    delete temp;
 }
 
-// ========== MAIN PROGRAM ==========
+void hapusData(int target) {
+if (head == nullptr) {
+        cout << "List kosong, tidak ada yang dihapus.\n";
+        return;
+    }
+
+    Node* current = head;
+    while (current != nullptr && current->data != target)
+        current = current->next;
+
+    if (current == nullptr) {
+        cout << "Data " << target << " tidak ditemukan.\n";
+        return;
+    }
+
+    if (current->prev != nullptr)
+        current->prev->next = current->next;
+    else
+        head = current->next;
+
+    if (current->next != nullptr)
+        current->next->prev = current->prev;
+    else
+        tail = current->prev;
+
+    cout << "Data " << target << " berhasil dihapus.\n";
+    delete current;
+}
+
+void updateData(int oldData, int newData) {
+    Node* current = head;
+    while (current != nullptr && current->data != oldData)
+        current = current->next;
+
+    if (current == nullptr) {
+        cout << "Data " << oldData << " tidak ditemukan.\n";
+        return;
+    }
+
+    current->data = newData;
+    cout << "Data " << oldData << " diubah menjadi " << newData<<".\n";
+}
+
+void tampilDepan() {
+    if (head == nullptr) {
+        cout << "List kosong.\n";
+        return;
+    }
+
+    cout << "Isi list (dari depan): ";
+    Node* current = head;
+    while (current != nullptr) {
+        cout << current->data << " ";
+        current = current->next;
+    }
+    cout << "\n";
+}
+
+// ====================================
+// Fungsi: Tampilkan dari belakang
+// ====================================
+void tampilBelakang() {
+    if (tail == nullptr) {
+        cout << "List kosong.\n";
+        return;
+    }
+
+    cout << "Isi list (dari belakang): ";
+    Node* current = tail;
+    while (current != nullptr) {
+        cout << current->data << " ";
+        current = current->prev;
+    }
+    cout << "\n";
+}
+
+// ====================================
+// MAIN PROGRAM (MENU INTERAKTIF)
+// ====================================
 int main() {
-    int pilihan, data, target, dataBaru;
+    int pilihan, data, target, oldData, newData;
 
     do {
-        cout << "\n=== MENU SINGLE LINKED LIST ===\n";
+        cout << "\n===== MENU DOUBLE LINKED LIST =====\n";
         cout << "1. Insert Depan\n";
         cout << "2. Insert Belakang\n";
-        cout << "3. Insert Setelah\n";
-        cout << "4. Hapus Data\n";
-        cout << "5. Update Data\n";
-        cout << "6. Tampilkan List\n";
+        cout << "3. Insert Setelah Data\n";
+        cout << "4. Hapus Depan\n";
+        cout << "5. Hapus Belakang\n";
+        cout << "6. Hapus Data Tertentu\n";
+        cout << "7. Update Data\n";
+        cout << "8. Tampil dari Depan\n";
+        cout << "9. Tampil dari Belakang\n";
         cout << "0. Keluar\n";
-        cout << "Pilih: ";
+        cout << "===================================\n";
+        cout << "Pilih menu: ";
         cin >> pilihan;
 
         switch (pilihan) {
@@ -165,33 +226,43 @@ int main() {
                 cout << "Masukkan data target: ";
                 cin >> target;
                 cout << "Masukkan data baru: ";
-                cin >> dataBaru;
-                insertSetelah(target, dataBaru);
+                cin >> data;
+                insertSetelah(target, data);
                 break;
             case 4:
-                cout << "Masukkan data yang ingin dihapus: ";
-                cin >> data;
-                hapusNode(data);
+                hapusDepan();
                 break;
             case 5:
-                cout << "Masukkan data lama: ";
-                cin >> data;
-                cout << "Masukkan data baru: ";
-                cin >> dataBaru;
-                updateNode(data, dataBaru);
+                hapusBelakang();
                 break;
             case 6:
-                tampilkanList();
+                cout << "Masukkan data yang ingin dihapus: ";
+                cin >> target;
+                hapusData(target);
+                break;
+            case 7:
+                cout << "Masukkan data lama: ";
+                cin >> oldData;
+                cout << "Masukkan data baru: ";
+                cin >> newData;
+                updateData(oldData, newData);
+                break;
+            case 8:
+                tampilDepan();
+                break;
+            case 9:
+                tampilBelakang();
                 break;
             case 0:
-                cout << "Program selesai.\n";
+                cout << "👋 Keluar dari program.\n";
                 break;
             default:
-                cout << "Pilihan tidak valid!\n";
+                cout << "Pilihan tidak valid.\n";
         }
+
     } while (pilihan != 0);
 
-return0;
+    return 0;
 }
 ```
 > Output
