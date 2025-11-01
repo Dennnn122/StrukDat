@@ -197,7 +197,7 @@ return0;
 > Output
 > ![output](output/g1.png)
 
-Pada perogram diatas kita harus sebuah list yang memiliki beberapa fungsi menggunakan singly linked list, kita membuat sebuah struck berisi data yang kita simpan serta pointer ke node berikutnya. Kita membuat fungsi insert depan, belakang dan setelah, insert setelah digunkan untuk memasukan data yang kita mau inputkan ke setelah data yang kita pilih. kita buat fungsi hapus, update dan tampilkan list data, untuk fungsi update node kita gunakan untuk mengubah data yang kita pilih ke data yang baru.
+Pada perogram diatas kita harus membuat sebuah list yang memiliki beberapa fungsi menggunakan singly linked list, kita membuat sebuah struck berisi data yang kita simpan serta pointer ke node berikutnya. Kita membuat fungsi insert depan, belakang dan setelah, insert setelah digunkan untuk memasukan data yang kita mau inputkan ke setelah data yang kita pilih. kita buat fungsi hapus, update dan tampilkan list data, untuk fungsi update node kita gunakan untuk mengubah data yang kita pilih ke data yang baru.
 
 Lalu kita buat fungsi main nya kita menggunakan switch case yang berisi 1-6 untuk memilih fungsi yang kita buat serta 0 untuk menghentikan program.
 
@@ -208,11 +208,12 @@ Lalu kita buat fungsi main nya kita menggunakan switch case yang berisi 1-6 untu
 buatlah single linked list untuk Antrian yang menyimpan data pembeli( nama dan pesanan). program memiliki beberapa menu seperti tambah antrian,  layani antrian(hapus), dan tampilkan antrian. \*antrian pertama harus yang pertama dilayani
 ```go
 #include <iostream>
+#include <string>
 using namespace std;
 
 struct Node {
-    char nama[50];
-    char pesanan[50];
+    string nama;
+    string pesanan;
     Node* next;
 };
 
@@ -223,30 +224,18 @@ private:
 
 public:
     Antrian() {
-        front = rear = NULL;
+        front = rear = nullptr;
     }
 
     bool isEmpty() {
-        return front == NULL;
+        return front == nullptr;
     }
 
-    void tambahAntrian(char nama[], char pesanan[]) {
+    void tambahAntrian(string nama, string pesanan) {
         Node* baru = new Node();
-        int i = 0;
-        while (nama[i] != '\0') {
-            baru->nama[i] = nama[i];
-            i++;
-        }
-        baru->nama[i] = '\0';
-
-        i = 0;
-        while (pesanan[i] != '\0') {
-            baru->pesanan[i] = pesanan[i];
-            i++;
-        }
-        baru->pesanan[i] = '\0';
-
-        baru->next = NULL;
+        baru->nama = nama;
+        baru->pesanan = pesanan;
+        baru->next = nullptr;
 
         if (isEmpty()) {
             front = rear = baru;
@@ -254,8 +243,7 @@ public:
             rear->next = baru;
             rear = baru;
         }
-        cout << baru->nama << " dengan pesanan '" << baru->pesanan 
-            << "' telah ditambahkan ke antrian.\n";
+        cout << nama << " dengan pesanan '" << pesanan << "' telah ditambahkan ke antrian.\n";
     }
 
     void layaniAntrian() {
@@ -265,25 +253,24 @@ public:
         }
 
         Node* hapus = front;
-        cout << hapus->nama << " dengan pesanan '" 
-            << hapus->pesanan << "' telah dilayani.\n";
+        cout << hapus->nama << " dengan pesanan '" << hapus->pesanan << "' telah dilayani.\n";
         front = front->next;
         delete hapus;
 
-        if (front == NULL)
-            rear = NULL;
+        if (front == nullptr)
+            rear = nullptr;
     }
 
     void tampilkanAntrian() {
         if (isEmpty()) {
-            cout << " Antrian kosong.\n";
+            cout << "Antrian kosong.\n";
             return;
         }
 
         cout << "\n Daftar Antrian:\n";
         Node* temp = front;
         int i = 1;
-        while (temp != NULL) {
+        while (temp != nullptr) {
             cout << i << ". " << temp->nama << " - " << temp->pesanan << endl;
             temp = temp->next;
             i++;
@@ -294,7 +281,7 @@ public:
 int main() {
     Antrian antrian;
     int pilihan;
-    char nama[50], pesanan[50];
+    string nama, pesanan;
 
     do {
         cout << "\n=== MENU ANTRIAN ===\n";
@@ -309,9 +296,9 @@ int main() {
         switch (pilihan) {
             case 1:
                 cout << "Masukkan nama pembeli: ";
-                cin.getline(nama, 50);
+                getline(cin, nama);
                 cout << "Masukkan pesanan: ";
-                cin.getline(pesanan, 50);
+                getline(cin, pesanan);
                 antrian.tambahAntrian(nama, pesanan);
                 break;
             case 2:
@@ -337,7 +324,7 @@ int main() {
 > Output
 > ![output](output/un1.png)
 
-Pada program diatas kita harus melalukan transpose pada sebuah matriks 3x3. Dengan melakukan inisiasi isi matriks awal, lalu membuat matriks kosong yang nantinya akan berisi hasil transpose. Kita menggunakan 2 loop untuk mengubah baris jadi kolom, dan kolom jadi baris. Lalu menampilkan output yaitu matriks awal menggunakan 2 loop untuk mencetak matriks asli tiap baris. Lalu menampilkan output kedua yaitu Matriks Hasil Transpose menggunakan 2 loop juga untuk mencetak matriks tiap baris.
+Pada program diatas kita harus membuat sebuah list yang memiliki beberapa fungsi menggunakan single linked list, kita membuat sebuah struct yang berisi string dari nama dan pesanan, serta pointer ke node berikutanya. disini menggunakan library include string serta public untuk class Antrian agar bisa dipanggil dari fungsi main. kita membuat fungsi tambahAntrian, layaniAntrian dan tampilkanAntrian, lalu pada fungsi main kita menggunakan switch case untuk memilih fungsi yang ingin dijalankan. 
 
 ### Soal 2
 
@@ -424,7 +411,7 @@ int main() {
 > Output
 > ![output](output/un2.png)
 
-Pada program diatas kita membuat prosedur penggunaan call by reference untuk mengkuadratkan sebuah bilangan, dimana pada program ini kita inisiasikan angka = 5. Prosedur kuadrat dengan parameter &x berisi rumus kuadrat yaitu x = x * x. Lalu output pertama yaitu menunjukan nilai awal yaitu angka 5, lalu kita panggil prosedur kuadrat dari angka. Kita mendapat output kedua yaitu nilai setelah dikuadratkan.
+Pada program diatas kita membuat sebuah program untuk membalikan urutan angka menggunkan single linked list, kita membuat sebuah struct berisi int data dan pointer. disini kita memiliki fungsi tambahData, tampilkan dan reverse untuk membilakn urutan, lalu pada fungsi main kita menggunakan angka dummy saja dan outputnya berupa urutan angka sebelum dibalik dan sesudah dibalik.
 
 ## Referensi
 
