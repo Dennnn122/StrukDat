@@ -268,9 +268,9 @@ int main() {
 > Output
 > ![output](output/g1.png)
 
-Pada perogram diatas kita harus membuat sebuah list yang memiliki beberapa fungsi menggunakan singly linked list, kita membuat sebuah struck berisi data yang kita simpan serta pointer ke node berikutnya. Kita membuat fungsi insert depan, belakang dan setelah, insert setelah digunkan untuk memasukan data yang kita mau inputkan ke setelah data yang kita pilih. kita buat fungsi hapus, update dan tampilkan list data, untuk fungsi update node kita gunakan untuk mengubah data yang kita pilih ke data yang baru.
+Pada perogram diatas kita harus membuat sebuah list yang memiliki beberapa fungsi menggunakan doubly linked list, kita membuat sebuah struck berisi data yang kita simpan serta pointer ke node berikutnya dan sebelumnya. Kita membuat fungsi insert depan, belakang dan setelah, insert setelah digunkan untuk memasukan data yang kita mau inputkan ke setelah data yang kita pilih. kita buat fungsi hapusDepan, hapusBelakang, hapusData, updateData, tampilDepan dan tampilBelakang 
 
-Lalu kita buat fungsi main nya kita menggunakan switch case yang berisi 1-6 untuk memilih fungsi yang kita buat serta 0 untuk menghentikan program.
+Lalu kita buat fungsi main nya kita menggunakan switch case yang berisi 1-9 untuk memilih fungsi yang kita buat serta 0 untuk menghentikan program dan default jika inputan user tidak valid.
 
 ## Unguided
 
@@ -282,111 +282,187 @@ buatlah single linked list untuk Antrian yang menyimpan data pembeli( nama dan p
 #include <string>
 using namespace std;
 
-struct Node {
-    string nama;
-    string pesanan;
-    Node* next;
+struct kendaraan {
+    string nopol;
+    string warna;
+    int thnBuat;
 };
 
-class Antrian {
-private:
-    Node* front;
-    Node* rear;
-
-public:
-    Antrian() {
-        front = rear = nullptr;
-    }
-
-    bool isEmpty() {
-        return front == nullptr;
-    }
-
-    void tambahAntrian(string nama, string pesanan) {
-        Node* baru = new Node();
-        baru->nama = nama;
-        baru->pesanan = pesanan;
-        baru->next = nullptr;
-
-        if (isEmpty()) {
-            front = rear = baru;
-        } else {
-            rear->next = baru;
-            rear = baru;
-        }
-        cout << nama << " dengan pesanan '" << pesanan << "' telah ditambahkan ke antrian.\n";
-    }
-
-    void layaniAntrian() {
-        if (isEmpty()) {
-            cout << "Antrian kosong, tidak ada yang bisa dilayani.\n";
-            return;
-        }
-
-        Node* hapus = front;
-        cout << hapus->nama << " dengan pesanan '" << hapus->pesanan << "' telah dilayani.\n";
-        front = front->next;
-        delete hapus;
-
-        if (front == nullptr)
-            rear = nullptr;
-    }
-
-    void tampilkanAntrian() {
-        if (isEmpty()) {
-            cout << "Antrian kosong.\n";
-            return;
-        }
-
-        cout << "\n Daftar Antrian:\n";
-        Node* temp = front;
-        int i = 1;
-        while (temp != nullptr) {
-            cout << i << ". " << temp->nama << " - " << temp->pesanan << endl;
-            temp = temp->next;
-            i++;
-        }
-    }
+struct ElmList {
+    kendaraan info;
+    ElmList* next;
+    ElmList* prev;
 };
+
+struct List {
+    ElmList* first;
+    ElmList* last;
+};
+
+void createList(List &L) {
+    L.first = nullptr;
+    L.last = nullptr;
+}
+
+ElmList* alokasi(kendaraan x) {
+    ElmList* P = new ElmList;
+    P->info = x;
+    P->next = nullptr;
+    P->prev = nullptr;
+    return P;
+}
+
+void dealokasi(ElmList* P) {
+    delete P;
+}
+
+void insertLast(List &L, ElmList* P) {
+    if (L.first == nullptr) {
+        L.first = P;
+        L.last = P;
+    } else {
+        P->prev = L.last;
+        L.last->next = P;
+        L.last = P;
+    }
+}
+
+ElmList* findElm(List L, string nopol) {
+    ElmList* P = L.first;
+    while (P != nullptr) {
+        if (P->info.nopol == nopol) {
+            return P;
+        }
+        P = P->next;
+    }
+    return nullptr;
+}
+
+void printInfo(List L) {
+    if (L.first == nullptr) {
+        cout << "List kosong.\n";
+        return;
+    }
+
+    ElmList* P = L.last; // tampil dari belakang seperti contoh
+    cout << "\nDATA LIST 1\n";
+    while (P != nullptr) {
+        cout << "Nomor Polisi : " << P->info.nopol << endl;
+        cout << "Warna        : " << P->info.warna << endl;
+        cout << "Tahun        : " << P->info.thnBuat << endl;
+        cout << endl;
+        P = P->prev;
+    }
+}
+
+void deleteFirst(List &L, ElmList* &P) {
+    if (L.first == nullptr) {
+        P = nullptr;
+    } else if (L.first == L.last) {
+        P = L.first;
+        L.first = nullptr;
+        L.last = nullptr;
+    } else {
+        P = L.first;
+        L.first = P->next;
+        L.first->prev = nullptr;
+        P->next = nullptr;
+    }
+}
+
+void deleteLast(List &L, ElmList* &P) {
+    if (L.first == nullptr) {
+        P = nullptr;
+    } else if (L.first == L.last) {
+        P = L.last;
+        L.first = nullptr;
+        L.last = nullptr;
+    } else {
+        P = L.last;
+        L.last = P->prev;
+        L.last->next = nullptr;
+        P->prev = nullptr;
+    }
+}
+
+void deleteAfter(ElmList* Prec, ElmList* &P) {
+    if (Prec != nullptr && Prec->next != nullptr) {
+        P = Prec->next;
+        Prec->next = P->next;
+        if (P->next != nullptr) {
+            P->next->prev = Prec;
+        }
+        P->next = nullptr;
+        P->prev = nullptr;
+    } else {
+        P = nullptr;
+    }
+}
 
 int main() {
-    Antrian antrian;
-    int pilihan;
-    string nama, pesanan;
+    List L;
+    createList(L);
+    kendaraan x;
+    ElmList* P;
+    string cari, hapus;
+    int n;
 
-    do {
-        cout << "\n=== MENU ANTRIAN ===\n";
-        cout << "1. Tambah Antrian\n";
-        cout << "2. Layani Antrian\n";
-        cout << "3. Tampilkan Antrian\n";
-        cout << "4. Keluar\n";
-        cout << "Pilih menu: ";
-        cin >> pilihan;
-        cin.ignore();
+    cout << "Masukkan jumlah kendaraan: ";
+    cin >> n;
+    cin.ignore();
 
-        switch (pilihan) {
-            case 1:
-                cout << "Masukkan nama pembeli: ";
-                getline(cin, nama);
-                cout << "Masukkan pesanan: ";
-                getline(cin, pesanan);
-                antrian.tambahAntrian(nama, pesanan);
-                break;
-            case 2:
-                antrian.layaniAntrian();
-                break;
-            case 3:
-                antrian.tampilkanAntrian();
-                break;
-            case 4:
-                cout << "Program selesai.\n";
-                break;
-            default:
-                cout << "Pilihan tidak valid.\n";
+    for (int i = 0; i < n; i++) {
+        cout << "\nMasukkan nomor polisi: ";
+        getline(cin, x.nopol);
+
+        // Cek duplikasi nomor polisi
+        if (findElm(L, x.nopol) != nullptr) {
+            cout << "Nomor polisi sudah terdaftar!\n";
+            continue;
         }
 
-    } while (pilihan != 4);
+        cout << "Masukkan warna kendaraan: ";
+        getline(cin, x.warna);
+        cout << "Masukkan tahun kendaraan: ";
+        cin >> x.thnBuat;
+        cin.ignore();
 
+        P = alokasi(x);
+        insertLast(L, P);
+    }
+
+    printInfo(L);
+
+    cout << "\nMasukkan Nomor Polisi yang dicari: ";
+    getline(cin, cari);
+    P = findElm(L, cari);
+    if (P != nullptr) {
+        cout << "\nNomor Polisi : " << P->info.nopol << endl;
+        cout << "Warna        : " << P->info.warna << endl;
+        cout << "Tahun        : " << P->info.thnBuat << endl;
+    } else {
+        cout << "Data tidak ditemukan!\n";
+    }
+
+    cout << "\nMasukkan Nomor Polisi yang akan dihapus: ";
+    getline(cin, hapus);
+    P = findElm(L, hapus);
+    if (P != nullptr) {
+        ElmList* del;
+        if (P == L.first) {
+            deleteFirst(L, del);
+        } else if (P == L.last) {
+            deleteLast(L, del);
+        } else {
+            deleteAfter(P->prev, del);
+        }
+        dealokasi(del);
+        cout << "Data dengan nomor polisi " << hapus << " berhasil dihapus.\n";
+    } else {
+        cout << "Data tidak ditemukan!\n";
+    }
+
+    printInfo(L);
     return 0;
 }
 
@@ -395,95 +471,10 @@ int main() {
 > Output
 > ![output](output/un1.png)
 
-Pada program diatas kita harus membuat sebuah list yang memiliki beberapa fungsi menggunakan single linked list, kita membuat sebuah struct yang berisi string dari nama dan pesanan, serta pointer ke node berikutanya. disini menggunakan library include string serta public untuk class Antrian agar bisa dipanggil dari fungsi main. kita membuat fungsi tambahAntrian, layaniAntrian dan tampilkanAntrian, lalu pada fungsi main kita menggunakan switch case untuk memilih fungsi yang ingin dijalankan. 
+Pada program di atas, kita membuat sebuah struktur data Doubly Linked List untuk menyimpan data kendaraan yang terdiri dari nomor polisi, warna, dan tahun pembuatan. Kita membuat beberapa struct yaitu struct kendaraan,elmlist dan list, kita juga memiliki beberapa fungsi yaitu createList,alokasi,dealokasi,insertlast,findElm,PrintInfo,deleteFirst,deleteLast dan delete after
 
-### Soal 2
-
-buatlah program kode untuk membalik (reverse) singly linked list (1-2-3 menjadi 3-2-1) 
-```go
-#include <iostream>
-using namespace std;
-
-struct Node {
-    int data;
-    Node* next;
-};
-
-class LinkedList {
-private:
-    Node* head;
-
-public:
-    LinkedList() {
-        head = NULL;
-    }
-
-    void tambahData(int data) {
-        Node* baru = new Node();
-        baru->data = data;
-        baru->next = NULL;
-
-        if (head == NULL) {
-            head = baru;
-        } else {
-            Node* temp = head;
-            while (temp->next != NULL)
-                temp = temp->next;
-            temp->next = baru;
-        }
-    }
-
-    void tampilkan() {
-        Node* temp = head;
-        while (temp != NULL) {
-            cout << temp->data;
-            if (temp->next != NULL) cout << " -> ";
-            temp = temp->next;
-        }
-        cout << endl;
-    }
-
-    void reverse() {
-        Node* prev = NULL;
-        Node* current = head;
-        Node* next = NULL;
-
-        while (current != NULL) {
-            next = current->next;
-            current->next = prev;
-            prev = current;
-            current = next;
-        }
-        head = prev;
-    }
-};
-
-int main() {
-    LinkedList list;
-    list.tambahData(1);
-    list.tambahData(2);
-    list.tambahData(3);
-    list.tambahData(4);
-    list.tambahData(5);
-
-    cout << "Sebelum dibalik: ";
-    list.tampilkan();
-
-    list.reverse();
-
-    cout << "Setelah dibalik: ";
-    list.tampilkan();
-
-    return 0;
-}
-
-```
-
-> Output
-> ![output](output/un2.png)
-
-Pada program diatas kita membuat sebuah program untuk membalikan urutan angka menggunkan single linked list, kita membuat sebuah struct berisi int data dan pointer. disini kita memiliki fungsi tambahData, tampilkan dan reverse untuk membilakn urutan, lalu pada fungsi main kita menggunakan angka dummy saja dan outputnya berupa urutan angka sebelum dibalik dan sesudah dibalik.
+Lalu pada fungsi main kita membuat list kosoong dengan createList, lalu user memssukan data kendaraan, setelah user mamsukan data kita akan mengecek apakah nopol yang di input sudah ada atau belum menggunakan findElm jika belum maka data akan dimasukan menggunakan insertLast
 
 ## Referensi
 
-1.https://daismabali.com/artikel_detail/54/1/Mengenal-Single-Linked-List-dalam-Struktur-Data.html (diakses 31/10/2025)
+1.https://www.geeksforgeeks.org/dsa/doubly-linked-list/ (diakses 31/10/2025)
