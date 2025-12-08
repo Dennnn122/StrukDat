@@ -1,9 +1,9 @@
-# <h1 align="center">Laporan Praktikum Modul 7 <br> Queue</h1>
+# <h1 align="center">Laporan Praktikum Modul 7 <br> Stack</h1>
 <p align="center">DENNA WAHYU SETYOBUDI - 103112430206</p>
 
 ## Dasar Teori
 
-Pada materi ini menjelaskan tentang Queue. Stack adalah struktur data linear yang mengikuti prinsip LIFO (Last In First Out), yaitu elemen terakhir yang dimasukkan akan dikeluarkan pertama kali. Artinya, baik operasi penyisipan maupun penghapusan hanya terjadi di satu sisi.
+Pada materi ini menjelaskan tentang Stack. Stack adalah struktur data linear yang mengikuti prinsip LIFO (Last In First Out), yaitu elemen terakhir yang dimasukkan akan dikeluarkan pertama kali. Artinya, baik operasi penyisipan maupun penghapusan hanya terjadi di satu sisi.
 
 ## Guided
 
@@ -108,7 +108,9 @@ int main(){
 > Output
 > ![output](output/g1.png)
 
+Pada program di atas, kita membuat sebuah adt stack, kita membuat serbuah struck berisi info[max] untuk menyimpan array dan top untuk menunjuk posisi data paling atas. kita juga memiliki beberapa fungsi yaitu kita membuat sebuah fungsi untuk menginisialisasi stack tsb, lalu kita mengecek kondisi stack menggunakan variabel boolean, lalu membuat sebuah fungsi untuk menambahkan dan mennghapus data, serta menampilkan isi,reverse, push ascending dan get input
 
+Lalu pada fungsi main kita menguji 3 tahap, yaitu pengujian stack, pengujian pushAscending dan pengujian getInput
 
 ## Unguided
 
