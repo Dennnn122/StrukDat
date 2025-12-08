@@ -1,9 +1,9 @@
-# <h1 align="center">Laporan Praktikum Modul 7 <br> Stack</h1>
+# <h1 align="center">Laporan Praktikum Modul 8 <br> Queue</h1>
 <p align="center">DENNA WAHYU SETYOBUDI - 103112430206</p>
 
 ## Dasar Teori
 
-Pada materi ini menjelaskan tentang Stack. Stack adalah struktur data linear yang mengikuti prinsip LIFO (Last In First Out), yaitu elemen terakhir yang dimasukkan akan dikeluarkan pertama kali. Artinya, baik operasi penyisipan maupun penghapusan hanya terjadi di satu sisi.
+Pada materi ini menjelaskan tentang Queue. Queue atau dalam bahasa Indonesia yang berarti antrean adalah struktur data yang menyusun elemen-elemen data dalam urutan linier. Prinsip dasar dari struktur data ini adalah “First In, First Out” (FIFO) yang berarti elemen data yang pertama dimasukkan ke dalam antrean akan menjadi yang pertama pula untuk dikeluarkan.
 
 ## Guided
 
@@ -13,67 +13,95 @@ Pada materi ini menjelaskan tentang Stack. Stack adalah struktur data linear yan
 #include <iostream>
 using namespace std;
 
-struct Node
-{
-    int data;
-    Node *next;
+#define MAX 5 // ukuran maksimal queue
+
+//struktur queue
+struct Queue {
+    int data[MAX];
+    int head;
+    int tail;
 };
 
-bool isEmpty(Node *top){
-    return top == nullptr;
+//membuat antrean kososng
+void createQueue(Queue &Q){
+    Q.head = -1;
+    Q.tail =-1;
 }
-void push (Node *&top, int data){
-    Node *newNode = new Node();
-    newNode->data = data;
-    newNode->next = top;
-    top = newNode;
+//mengecek apakah queue kosong
+bool isEmpty(Queue Q) {
+    return (Q.head == -1 && Q.tail ==-1);
 }
-
-int pop(Node *&top){
-    if (isEmpty(top)){
-        cout << "stack kosong, tidak bisa pop!" << endl;
-        return 0;
+//menegecek apkaah queue penuh
+bool isFull(Queue Q) {
+    return (Q.tail == MAX - 1);
+}
+//menapilkan isi antrean
+void printQueue(Queue Q) {
+    if (isEmpty(Q)) {
+        cout << "Queue kososng!" << endl;
+    } else {
+        cout <<"Queue :";
+        for (int i = Q.head; i <= Q.tail; i++) {
+            cout << Q.data[i] << "";
+        }
+        cout << endl;
     }
-    int poppedData = top->data;
-    Node *temp = top;
-    top = top->next;
-
-    delete temp;
-    return poppedData;
 }
 
-void show(Node *top){
-    if (isEmpty(top)){
-        cout << "stack kosongh." << endl;
-        return;
+//menambah elemen ke dalam antrian (Enqueue)
+void enqueue(Queue &Q, int x) {
+    if (isFull(Q)) {
+        cout << "Queue penuh! tidak bisa menambah data." << endl;
+    } else {
+        if (isEmpty(Q)) {
+            Q.head = Q.tail = 0;
+        } else {
+            Q.tail++;
+        }
+        Q.data[Q.tail] = x;
+        cout << "Enqueue:" <<x << endl;
     }
-    cout << "TOP ->";
-    Node *temp = top;
-
-    while (temp != nullptr)
-    {
-        cout << temp-> data << "->";
-        temp = temp->next;
-    }
-
-    cout << "NULL" << endl;
 }
 
+//menghapus ekemen dari antrean (Dequeue)
+void dequeue(Queue &Q) {
+    if (isEmpty(Q)) {
+        cout << "Queue kosong! tidak ada data yang dihapus << endl";
+    } else {
+        cout << "Dequeue:" << Q.data[Q.head]<< endl;
+        // jika hanya 1 elemen
+        if (Q.head == Q.tail) {
+            Q.head = Q.tail =-1;
+        } else {
+            //geser semua elemen ke kiri
+            for (int i = Q.head; i< Q.tail; i++){
+                Q.data[i] = Q.data[i+1];}
+            }
+            Q.tail--;
+        } 
+    }
+
+//program utama 
 int main(){
-    Node *stack = nullptr;
+    Queue Q;
+    createQueue(Q);
 
-    push(stack, 10);
-    push(stack, 20);
-    push(stack, 30);
+    enqueue(Q, 5);
+    enqueue(Q, 2);
+    enqueue(Q, 7);
+    printQueue(Q);
 
-    cout << "Menampilkan isi stack :" << endl;
-    show(stack);
+    dequeue(Q);
+    printQueue(Q);
 
-    cout << "Pop :" << pop(stack) << endl;
+    enqueue(Q, 4);
+    enqueue(Q, 9);
+    printQueue(Q);
 
-    cout << "menampilkan sisa stack :" << endl;
-    show(stack);
-    
+    dequeue(Q);
+    dequeue(Q);
+    printQueue(Q);
+
     return 0;
 }
 ```
@@ -88,164 +116,284 @@ Lalu kita buat fungsi main nya kita buat pointer stack dan menginisialisasi stac
 
 ### Soal 1
 
-buatlah single linked list untuk Antrian yang menyimpan data pembeli( nama dan pesanan). program memiliki beberapa menu seperti tambah antrian,  layani antrian(hapus), dan tampilkan antrian. \*antrian pertama harus yang pertama dilayani
 ```go
 #include <iostream>
 using namespace std;
 
-const int MAX = 20;
-
-struct Stack {
-    int info[MAX];
-    int top;
+typedef int infotype;
+struct Queue {
+    infotype info[5];
+    int head;
+    int tail;
 };
 
-void createStack(Stack &S) {
-    S.top = -1;
+void createQueue(Queue &Q) {
+    Q.head = -1;
+    Q.tail = -1;
 }
 
-bool isFull(Stack S) {
-    return S.top == MAX - 1;
+bool isEmptyQueue(Queue Q) {
+    return Q.head == -1;
 }
 
-bool isEmpty(Stack S) {
-    return S.top == -1;
+bool isFullQueue(Queue Q) {
+    return Q.tail == 4; // Penuh jika tail di ujung array
 }
 
-void push(Stack &S, int x) {
-    if (isFull(S)) {
-        cout << "Stack penuh!\n";
+void enqueue(Queue &Q, infotype x) {
+    if (isFullQueue(Q)) {
+        cout << "Queue Full" << endl;
     } else {
-        S.top++;
-        S.info[S.top] = x;
-    }
-}
-
-int pop(Stack &S) {
-    if (isEmpty(S)) {
-        cout << "Stack kosong!\n";
-        return -1;
-    } else {
-        int x = S.info[S.top];
-        S.top--;
-        return x;
-    }
-}
-
-void printInfo(Stack S) {
-    if (isEmpty(S)) {
-        cout << "Stack kosong.\n";
-    } else {
-        cout << "[TOP] ";
-        for (int i = S.top; i >= 0; i--) {
-            cout << S.info[i] << " ";
+        if (isEmptyQueue(Q)) {
+            Q.head = 0;
+            Q.tail = 0;
+            Q.info[0] = x;
+        } else {
+            Q.tail++;
+            Q.info[Q.tail] = x;
         }
-        cout << endl;
     }
 }
 
-void balikStack(Stack &S) {
-    Stack temp;
-    createStack(temp);
-
-    while (!isEmpty(S)) {
-        int x = pop(S);
-        push(temp, x);
+infotype dequeue(Queue &Q) {
+    infotype val = -1;
+    if (isEmptyQueue(Q)) {
+        cout << "Queue Empty" << endl;
+    } else {
+        val = Q.info[Q.head];
+        if (Q.head == Q.tail) { // Sisa 1 elemen
+            Q.head = -1;
+            Q.tail = -1;
+        } else {
+            // Head tetap di 0, elemen belakang maju ke depan
+            for (int i = 0; i < Q.tail; i++) {
+                Q.info[i] = Q.info[i + 1];
+            }
+            Q.tail--; // Tail mundur
+        }
     }
-    S = temp;
+    return val;
 }
 
-void pushAscending(Stack &S, int x) {
-    if (isFull(S)) {
-        cout << "Stack penuh!\n";
-        return;
+void printInfo(Queue Q) {
+    cout << " " << Q.head << " - " << Q.tail << "\t | ";
+    if (isEmptyQueue(Q)) cout << "empty queue";
+    else {
+        for (int i = Q.head; i <= Q.tail; i++) cout << Q.info[i] << " ";
     }
-
-    Stack temp;
-    createStack(temp);
-
-    // Pindahkan elemen lebih kecil dari x ke stack sementara
-    while (!isEmpty(S) && S.info[S.top] < x) {
-        push(temp, pop(S));
-    }
-
-    // Masukkan elemen baru
-    push(S, x);
-
-    // Kembalikan elemen dari stack sementara
-    while (!isEmpty(temp)) {
-        push(S, pop(temp));
-    }
+    cout << endl;
 }
-
-// Membaca karakter satu per satu hingga user menekan Enter
-void getInputStream(Stack &S) {
-    cout << "Masukkan karakter (tekan ENTER untuk berhenti): ";
-    char c;
-    while (true) {
-        c = cin.get();  // baca 1 karakter
-        if (c == '\n') break; // berhenti jika enter
-        if (!isFull(S))
-            push(S, c - '0'); // ubah char ke angka
-    }
-}
-
 
 int main() {
-    cout << "Hello world!\n";
-
-    Stack S;
-    createStack(S);
-
-    push(S, 3);
-    push(S, 4);
-    push(S, 8);
-    pop(S);
-    push(S, 2);
-    push(S, 3);
-    pop(S);
-    push(S, 9);
-
-    printInfo(S);
-
-    cout << "balik stack\n";
-    balikStack(S);
-    printInfo(S);
-
-    cout << "\n\n=== PUSH ASCENDING ===\n";
-    createStack(S);
-    pushAscending(S, 3);
-    pushAscending(S, 4);
-    pushAscending(S, 8);
-    pushAscending(S, 2);
-    pushAscending(S, 3);
-    pushAscending(S, 9);
-    printInfo(S);
-    cout << "balik stack\n";
-    balikStack(S);
-    printInfo(S);
-
-    cout << "\n\n=== INPUT STREAM ===\n";
-    createStack(S);
-    cin.ignore(); 
-    getInputStream(S);
-    printInfo(S);
-    cout << "balik stack\n";
-    balikStack(S);
-    printInfo(S);
-
+    cout << "ALTERNATIF 1" << endl;
+    Queue Q;
+    createQueue(Q);
+    printInfo(Q);
+    enqueue(Q, 5); printInfo(Q);
+    enqueue(Q, 2); printInfo(Q);
+    enqueue(Q, 7); printInfo(Q);
+    dequeue(Q);    printInfo(Q);
+    enqueue(Q, 4); printInfo(Q);
+    dequeue(Q);    printInfo(Q);
+    dequeue(Q);    printInfo(Q);
     return 0;
 }
-
 ```
 
 > Output
 > ![output](output/un1.png)
 
-Pada program di atas, kita membuat sebuah adt stack, kita membuat serbuah struck berisi info[max] untuk menyimpan array dan top untuk menunjuk posisi data paling atas. kita juga memiliki beberapa fungsi yaitu kita membuat sebuah fungsi untuk menginisialisasi stack tsb, lalu kita mengecek kondisi stack menggunakan variabel boolean, lalu membuat sebuah fungsi untuk menambahkan dan mennghapus data, serta menampilkan isi,reverse, push ascending dan get input
+Pada program di atas kita disuruh untuk membuat queue untuk alternatif 1 dimana head diam,tail bergerak. Kita membuat sebuah struck dimana kita Menyimpan data pada info[5], dengan head (depan) dan tail (belakang), buat fungsi createQueue, enqueue,dequeue, dan printQueue. cek apakah queue kosong atau full menggunakan boolean, pada alt ini queue dianggap penuh jika tail mencapai indeks terakhir (4). Untuk dequeue Saat data di head diambil, semua elemen yang tersisa di belakangnya digeser satu posisi ke kiri (maju). Head selalu tetap di indeks 0, dan tail berkurang 1.
 
-Lalu pada fungsi main kita menguji 3 tahap, yaitu pengujian stack, pengujian pushAscending dan pengujian getInput
+lalu pada fungsi main kita jalankan data dummy.
+
+### Soal 2
+
+```go
+#include <iostream>
+using namespace std;
+
+typedef int infotype;
+struct Queue {
+    infotype info[5];
+    int head;
+    int tail;
+};
+
+void createQueue(Queue &Q) {
+    Q.head = -1;
+    Q.tail = -1;
+}
+
+bool isEmptyQueue(Queue Q) {
+    return Q.head == -1;
+}
+
+bool isFullQueue(Queue Q) {
+    return Q.tail == 4; // Penuh jika tail di ujung array
+}
+
+void enqueue(Queue &Q, infotype x) {
+    if (isFullQueue(Q)) {
+        cout << "Queue Full" << endl;
+    } else {
+        if (isEmptyQueue(Q)) {
+            Q.head = 0;
+            Q.tail = 0;
+            Q.info[0] = x;
+        } else {
+            Q.tail++;
+            Q.info[Q.tail] = x;
+        }
+    }
+}
+
+infotype dequeue(Queue &Q) {
+    infotype val = -1;
+    if (isEmptyQueue(Q)) {
+        cout << "Queue Empty" << endl;
+    } else {
+        val = Q.info[Q.head];
+        if (Q.head == Q.tail) { // Sisa 1 elemen
+            Q.head = -1;
+            Q.tail = -1;
+        } else {
+            // Head tetap di 0, elemen belakang maju ke depan
+            for (int i = 0; i < Q.tail; i++) {
+                Q.info[i] = Q.info[i + 1];
+            }
+            Q.tail--; // Tail mundur
+        }
+    }
+    return val;
+}
+
+void printInfo(Queue Q) {
+    cout << " " << Q.head << " - " << Q.tail << "\t | ";
+    if (isEmptyQueue(Q)) cout << "empty queue";
+    else {
+        for (int i = Q.head; i <= Q.tail; i++) cout << Q.info[i] << " ";
+    }
+    cout << endl;
+}
+
+int main() {
+    cout << "ALTERNATIF 1" << endl;
+    Queue Q;
+    createQueue(Q);
+    printInfo(Q);
+    enqueue(Q, 5); printInfo(Q);
+    enqueue(Q, 2); printInfo(Q);
+    enqueue(Q, 7); printInfo(Q);
+    dequeue(Q);    printInfo(Q);
+    enqueue(Q, 4); printInfo(Q);
+    dequeue(Q);    printInfo(Q);
+    dequeue(Q);    printInfo(Q);
+    return 0;
+}
+```
+
+> Output
+> ![output](output/un1.png)
+
+Pada program di atas kita disuruh untuk membuat queue untuk alternatif 2 dimana head bergerak,tail bergerak. Kita membuat sebuah struck dimana kita Menyimpan data pada info[5], dengan head (depan) dan tail (belakang), buat fungsi createQueue, enqueue,dequeue, dan printQueue. cek apakah queue kosong atau full menggunakan boolean, pada alt ini queue dianggap penuh jika tail mencapai indeks terakhir (4). Untuk dequeue Data di head diambil, dan head langsung ditambah 1. Tidak ada pergeseran elemen.
+
+lalu pada fungsi main kita jalankan data dummy.
+
+### Soal 3
+
+```go
+#include <iostream>
+using namespace std;
+
+typedef int infotype;
+struct Queue {
+    infotype info[5];
+    int head;
+    int tail;
+};
+
+void createQueue(Queue &Q) {
+    Q.head = -1;
+    Q.tail = -1;
+}
+
+bool isEmptyQueue(Queue Q) {
+    return Q.head == -1;
+}
+
+bool isFullQueue(Queue Q) {
+    return Q.tail == 4; // Penuh jika tail di ujung array
+}
+
+void enqueue(Queue &Q, infotype x) {
+    if (isFullQueue(Q)) {
+        cout << "Queue Full" << endl;
+    } else {
+        if (isEmptyQueue(Q)) {
+            Q.head = 0;
+            Q.tail = 0;
+            Q.info[0] = x;
+        } else {
+            Q.tail++;
+            Q.info[Q.tail] = x;
+        }
+    }
+}
+
+infotype dequeue(Queue &Q) {
+    infotype val = -1;
+    if (isEmptyQueue(Q)) {
+        cout << "Queue Empty" << endl;
+    } else {
+        val = Q.info[Q.head];
+        if (Q.head == Q.tail) { // Sisa 1 elemen
+            Q.head = -1;
+            Q.tail = -1;
+        } else {
+            // Head tetap di 0, elemen belakang maju ke depan
+            for (int i = 0; i < Q.tail; i++) {
+                Q.info[i] = Q.info[i + 1];
+            }
+            Q.tail--; // Tail mundur
+        }
+    }
+    return val;
+}
+
+void printInfo(Queue Q) {
+    cout << " " << Q.head << " - " << Q.tail << "\t | ";
+    if (isEmptyQueue(Q)) cout << "empty queue";
+    else {
+        for (int i = Q.head; i <= Q.tail; i++) cout << Q.info[i] << " ";
+    }
+    cout << endl;
+}
+
+int main() {
+    cout << "ALTERNATIF 1" << endl;
+    Queue Q;
+    createQueue(Q);
+    printInfo(Q);
+    enqueue(Q, 5); printInfo(Q);
+    enqueue(Q, 2); printInfo(Q);
+    enqueue(Q, 7); printInfo(Q);
+    dequeue(Q);    printInfo(Q);
+    enqueue(Q, 4); printInfo(Q);
+    dequeue(Q);    printInfo(Q);
+    dequeue(Q);    printInfo(Q);
+    return 0;
+}
+```
+
+> Output
+> ![output](output/un1.png)
+
+Pada program di atas kita disuruh untuk membuat queue untuk alternatif 3 dimana head dan tail berputar. Kita membuat sebuah struck dimana kita Menyimpan data pada info[5], dengan head (depan) dan tail (belakang), buat fungsi createQueue, enqueue,dequeue, dan printQueue. cek apakah queue kosong atau full menggunakan boolean, pada alt ini queue dianggap penuh jika (tail + 1) % 5 sama dengan head. Untuk dequeue dan enqueue Pergerakan head dan tail menggunakan operasi modulo (% 5). Jika tail atau head mencapai batas array, mereka akan kembali ke indeks 0.
+
+lalu pada fungsi main kita jalankan data dummy.
+
 ## Referensi
 
-1.https://www.geeksforgeeks.org/dsa/introduction-to-stack-data-structure-and-algorithm-tutorials/ (diakses 31/10/2025)
+1.https://www.dicoding.com/blog/struktur-data-queue-pengertian-fungsi-dan-jenisnya/ (diakses /12/2025)
 
