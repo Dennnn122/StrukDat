@@ -392,5 +392,5 @@ lalu pada fungsi main kita jalankan data dummy.
 
 ## Referensi
 
-1.https://www.dicoding.com/blog/struktur-data-queue-pengertian-fungsi-dan-jenisnya/ (diakses /12/2025)
+1.https://www.dicoding.com/blog/struktur-data-queue-pengertian-fungsi-dan-jenisnya/ (diakses 7/12/2025)
 
