@@ -109,9 +109,9 @@ int main(){
 > Output
 > ![output](output/g1.png)
 
-Pada perogram diatas kita harus membuat sebuah adt stack, kita membuat sebuah struck berisi data yang kita simpan serta pointer ke node berikutnya. Kita membuat fungsi isEmpty,push, pop dan show 
+Pada perogram diatas kita harus mengimplementasikan Abstract Data Type (ADT) Binary Search Tree (BST),Kita membuat sebuah struct Node yang berisi data, pointer kekiri dan kanan. buat fungsi fungsi yaitu membuat_node,insert,search,nilai_terkecil,hapus,update,pre_order,in_order dan post_order
 
-Lalu kita buat fungsi main nya kita buat pointer stack dan menginisialisasi stack kosong lalu menambahkan data dummy yaitu 10,20,30 ke stack menggunakan push lalu menampilkan stack lalu menghapus data teratas menggunakan pop lalu menampilkan stack 
+Lalu kita buat fungsi main nya kita buat root kosong lalu kita issert data dummy dan menjalankan semua fungsi yang ada
 
 ## Unguided
 
@@ -119,84 +119,77 @@ Lalu kita buat fungsi main nya kita buat pointer stack dan menginisialisasi stac
 
 ```go
 #include <iostream>
+#include <string>
+
 using namespace std;
 
 typedef int infotype;
-struct Queue {
-    infotype info[5];
-    int head;
-    int tail;
+
+struct Node {
+    infotype info;
+    Node* left;
+    Node* right;
 };
 
-void createQueue(Queue &Q) {
-    Q.head = -1;
-    Q.tail = -1;
+typedef Node* address;
+
+
+address alokasi(infotype x) {
+    address newNode = new Node;
+    newNode->info = x;
+    newNode->left = NULL;
+    newNode->right = NULL;
+    return newNode;
 }
 
-bool isEmptyQueue(Queue Q) {
-    return Q.head == -1;
-}
-
-bool isFullQueue(Queue Q) {
-    return Q.tail == 4; // Penuh jika tail di ujung array
-}
-
-void enqueue(Queue &Q, infotype x) {
-    if (isFullQueue(Q)) {
-        cout << "Queue Full" << endl;
-    } else {
-        if (isEmptyQueue(Q)) {
-            Q.head = 0;
-            Q.tail = 0;
-            Q.info[0] = x;
-        } else {
-            Q.tail++;
-            Q.info[Q.tail] = x;
-        }
+void insertNode(infotype x, address& root) {
+    if (root == NULL) {
+        root = alokasi(x);
+    }
+    else if (x < root->info) {
+        insertNode(x, root->left);
+    }
+    else if (x > root->info) {
+        insertNode(x, root->right);
     }
 }
 
-infotype dequeue(Queue &Q) {
-    infotype val = -1;
-    if (isEmptyQueue(Q)) {
-        cout << "Queue Empty" << endl;
-    } else {
-        val = Q.info[Q.head];
-        if (Q.head == Q.tail) { // Sisa 1 elemen
-            Q.head = -1;
-            Q.tail = -1;
-        } else {
-            // Head tetap di 0, elemen belakang maju ke depan
-            for (int i = 0; i < Q.tail; i++) {
-                Q.info[i] = Q.info[i + 1];
-            }
-            Q.tail--; // Tail mundur
-        }
+address findNode(infotype x, address root) {
+    if (root == NULL || root->info == x) {
+        return root;
+    } 
+    else if (x < root->info) {
+        return findNode(x, root->left);
+    } 
+    else { 
+        return findNode(x, root->right);
     }
-    return val;
 }
 
-void printInfo(Queue Q) {
-    cout << " " << Q.head << " - " << Q.tail << "\t | ";
-    if (isEmptyQueue(Q)) cout << "empty queue";
-    else {
-        for (int i = Q.head; i <= Q.tail; i++) cout << Q.info[i] << " ";
+void printinorder(address root) {
+    if (root != NULL) {
+        printinorder(root->left);
+        cout << root->info << " - ";
+        printinorder(root->right);
     }
+}
+
+int main()
+{
+    cout << "Hello World!" << endl;
+    
+    address root = NULL;
+
+    insertNode(1, root);
+    insertNode(2, root);
+    insertNode(6, root);
+    insertNode(4, root);
+    insertNode(5, root);
+    insertNode(3, root);
+    insertNode(7, root);
+    printinorder(root); 
     cout << endl;
-}
 
-int main() {
-    cout << "ALTERNATIF 1" << endl;
-    Queue Q;
-    createQueue(Q);
-    printInfo(Q);
-    enqueue(Q, 5); printInfo(Q);
-    enqueue(Q, 2); printInfo(Q);
-    enqueue(Q, 7); printInfo(Q);
-    dequeue(Q);    printInfo(Q);
-    enqueue(Q, 4); printInfo(Q);
-    dequeue(Q);    printInfo(Q);
-    dequeue(Q);    printInfo(Q);
     return 0;
 }
 ```
@@ -204,87 +197,125 @@ int main() {
 > Output
 > ![output](output/un1.png)
 
-Pada program di atas kita disuruh untuk membuat queue untuk alternatif 1 dimana head diam,tail bergerak. Kita membuat sebuah struck dimana kita Menyimpan data pada info[5], dengan head (depan) dan tail (belakang), buat fungsi createQueue, enqueue,dequeue, dan printQueue. cek apakah queue kosong atau full menggunakan boolean, pada alt ini queue dianggap penuh jika tail mencapai indeks terakhir (4). Untuk dequeue Saat data di head diambil, semua elemen yang tersisa di belakangnya digeser satu posisi ke kiri (maju). Head selalu tetap di indeks 0, dan tail berkurang 1.
+Pada program di atas kita disuruh untuk membuat ADT Binary Search Tree menggunakan Linked list, buat struct Node verisi info, pointer ke kiri dan kanan. buat fungsi fungsinnya yaitu alokasi, insertNode,findNode dan printNode
 
-lalu pada fungsi main kita jalankan data dummy.
+lalu pada fungsi main kita tambahkan output "Hello World!" diawal serta inisiasi root, lalu tambahkan angka dummy agar sesuai dengan output yang diinginkan.
 
 ### Soal 2
 
 ```go
 #include <iostream>
+#include <algorithm> // Diperlukan untuk std::max
+
 using namespace std;
 
+
 typedef int infotype;
-struct Queue {
-    infotype info[5];
-    int head;
-    int tail;
+
+struct Node {
+    infotype info;
+    Node* left;
+    Node* right;
 };
 
-void createQueue(Queue &Q) {
-    Q.head = -1;
-    Q.tail = -1;
+typedef Node* address;
+
+
+address alokasi(infotype x) {
+    address newNode = new Node;
+    newNode->info = x;
+    newNode->left = NULL;
+    newNode->right = NULL;
+    return newNode;
 }
 
-bool isEmptyQueue(Queue Q) {
-    return Q.head == -1;
-}
-
-bool isFullQueue(Queue Q) {
-    return Q.tail == 4; // Penuh jika tail mentok kanan
-}
-
-void enqueue(Queue &Q, infotype x) {
-    if (isFullQueue(Q)) {
-        cout << "Queue Full" << endl;
-    } else {
-        if (isEmptyQueue(Q)) {
-            Q.head = 0;
-            Q.tail = 0;
-        } else {
-            Q.tail++; // Tail maju
-        }
-        Q.info[Q.tail] = x;
+void insertNode(infotype x, address& root) {
+    if (root == NULL) {
+        root = alokasi(x);
+    }
+    else if (x < root->info) {
+        insertNode(x, root->left);
+    }
+    else if (x > root->info) {
+        insertNode(x, root->right);
     }
 }
 
-infotype dequeue(Queue &Q) {
-    infotype val = -1;
-    if (isEmptyQueue(Q)) {
-        cout << "Queue Empty" << endl;
-    } else {
-        val = Q.info[Q.head];
-        if (Q.head == Q.tail) {
-            Q.head = -1;
-            Q.tail = -1;
-        } else {
-            Q.head++; // Head maju ke kanan (Index bertambah)
-        }
-    }
-    return val;
-}
-
-void printInfo(Queue Q) {
-    cout << " " << Q.head << " - " << Q.tail << "\t | ";
-    if (isEmptyQueue(Q)) cout << "empty queue";
+address findNode(infotype x, address root) {
+    if (root == NULL || root->info == x) {
+        return root;
+    } 
+    else if (x < root->info) {
+        return findNode(x, root->left);
+    } 
     else {
-        for (int i = Q.head; i <= Q.tail; i++) cout << Q.info[i] << " ";
+        return findNode(x, root->right);
     }
-    cout << endl;
 }
 
-int main() {
-    cout << "ALTERNATIF 2" << endl;
-    Queue Q;
-    createQueue(Q);
-    printInfo(Q);
-    enqueue(Q, 5); printInfo(Q);
-    enqueue(Q, 2); printInfo(Q);
-    enqueue(Q, 7); printInfo(Q);
-    dequeue(Q);    printInfo(Q); 
-    enqueue(Q, 4); printInfo(Q);
-    dequeue(Q);    printInfo(Q);
-    dequeue(Q);    printInfo(Q);
+void InOrder(address root) {
+    if (root != NULL) {
+        InOrder(root->left);
+        cout << root->info << " - ";
+        InOrder(root->right);
+    }
+}
+
+
+// Mengembalikan banyak node yang ada di dalam BST
+int hitungNode(address root) {
+    if (root == NULL) {
+        return 0;
+    }
+    return hitungNode(root->left) + hitungNode(root->right) + 1;
+}
+
+// Mengembalikan jumlah (total) info dari node-node yang ada di dalam BST
+int hitungTotalInfo(address root) {
+    if (root == NULL) {
+        return 0;
+    }
+    return hitungTotalInfo(root->left) + hitungTotalInfo(root->right) + root->info;
+}
+
+// Mengembalikan kedalaman maksimal (tinggi) dari binary tree
+int hitungKedalaman(address root) {
+    if (root == NULL) {
+        return 0;
+    }
+    
+    int kedalamanKiri = hitungKedalaman(root->left);
+    int kedalamanKanan = hitungKedalaman(root->right);
+    
+    // Menggunakan std::max dari <algorithm>
+    return max(kedalamanKiri, kedalamanKanan) + 1;
+}
+
+
+
+int main()
+{
+    cout << "Hello world!" << endl;
+    
+    address root = NULL;
+
+    insertNode(1, root);
+    insertNode(2, root);
+    insertNode(6, root);
+    insertNode(4, root);
+    insertNode(5, root);
+    insertNode(3, root);
+    insertNode(6, root); 
+    insertNode(7, root);
+
+    InOrder(root); 
+    cout << "\n";
+
+    cout << "kedalaman : " << hitungKedalaman(root) << endl; 
+    cout << "jumlah node : " << hitungNode(root) << endl;
+    cout << "total : " << hitungTotalInfo(root) << endl;
+
+
     return 0;
 }
 ```
@@ -292,94 +323,140 @@ int main() {
 > Output
 > ![output](output/un2.png)
 
-Pada program di atas kita disuruh untuk membuat queue untuk alternatif 2 dimana head bergerak,tail bergerak. Kita membuat sebuah struck dimana kita Menyimpan data pada info[5], dengan head (depan) dan tail (belakang), buat fungsi createQueue, enqueue,dequeue, dan printQueue. cek apakah queue kosong atau full menggunakan boolean, pada alt ini queue dianggap penuh jika tail mencapai indeks terakhir (4). Untuk dequeue Data di head diambil, dan head langsung ditambah 1. Tidak ada pergeseran elemen.
+Pada program di atas kita disuruh untuk membuat fungsi untuk menghitung jumlah node, buat struct Node berisi info,pointer kekiri dan kanan.uat fungsi fungsinnya yaitu alokasi, insertNode,findNode, InOrder, hitungNode, hitungTotalInfo, hitungKedalaman
 
-lalu pada fungsi main kita jalankan data dummy.
+lalu pada fungsi main kita tambahkan output "Hello World!" diawal serta inisiasi root, lalu tambahkan angka dummy agar sesuai dengan output yang diinginkan. Untuk kode ini kita tampilkan juga kedalaman, jumlah node dan total infonya
 
 ### Soal 3
 
 ```go
 #include <iostream>
+#include <algorithm> // Diperlukan untuk std::max
+
 using namespace std;
 
+
 typedef int infotype;
-struct Queue {
-    infotype info[5];
-    int head;
-    int tail;
+
+struct Node {
+    infotype info;
+    Node* left;
+    Node* right;
 };
 
-void createQueue(Queue &Q) {
-    Q.head = -1;
-    Q.tail = -1;
+typedef Node* address;
+
+
+address alokasi(infotype x) {
+    address newNode = new Node;
+    newNode->info = x;
+    newNode->left = NULL;
+    newNode->right = NULL;
+    return newNode;
 }
 
-bool isEmptyQueue(Queue Q) {
-    return Q.head == -1;
-}
-
-bool isFullQueue(Queue Q) {
-    // Penuh jika langkah selanjutnya dari tail adalah head
-    return ((Q.tail + 1) % 5 == Q.head);
-}
-
-void enqueue(Queue &Q, infotype x) {
-    if (isFullQueue(Q)) {
-        cout << "Queue Full" << endl;
-    } else {
-        if (isEmptyQueue(Q)) {
-            Q.head = 0;
-            Q.tail = 0;
-        } else {
-            Q.tail = (Q.tail + 1) % 5;
-        }
-        Q.info[Q.tail] = x;
+void insertNode(infotype x, address& root) {
+    if (root == NULL) {
+        root = alokasi(x);
+    }
+    else if (x < root->info) {
+        insertNode(x, root->left);
+    }
+    else if (x > root->info) {
+        insertNode(x, root->right);
     }
 }
 
-infotype dequeue(Queue &Q) {
-    infotype val = -1;
-    if (isEmptyQueue(Q)) {
-        cout << "Queue Empty" << endl;
-    } else {
-        val = Q.info[Q.head];
-        if (Q.head == Q.tail) {
-            Q.head = -1;
-            Q.tail = -1;
-        } else {
-            Q.head = (Q.head + 1) % 5;
-        }
+
+// Mengembalikan kedalaman maksimal (tinggi) dari binary tree
+int hitungKedalaman(address root) {
+    if (root == NULL) {
+        return 0;
     }
-    return val;
+    int kedalamanKiri = hitungKedalaman(root->left);
+    int kedalamanKanan = hitungKedalaman(root->right);
+    return max(kedalamanKiri, kedalamanKanan) + 1;
 }
 
-void printInfo(Queue Q) {
-    cout << " " << Q.head << " - " << Q.tail << "\t | ";
-    if (isEmptyQueue(Q)) {
-        cout << "empty queue";
-    } else {
-        int i = Q.head;
-        while (i != Q.tail) {
-            cout << Q.info[i] << " ";
-            i = (i + 1) % 5;
-        }
-        cout << Q.info[i] << " "; // Print elemen terakhir
+// Mengembalikan banyak node yang ada di dalam BST
+int hitungNode(address root) {
+    if (root == NULL) {
+        return 0;
     }
+    return hitungNode(root->left) + hitungNode(root->right) + 1;
+}
+
+// Mengembalikan total info dari node-node yang ada di dalam BST
+int hitungTotalInfo(address root) {
+    if (root == NULL) {
+        return 0;
+    }
+    return hitungTotalInfo(root->left) + hitungTotalInfo(root->right) + root->info;
+}
+
+
+// Urutan: Kiri -> Root -> Kanan
+void InOrder(address root) {
+    if (root != NULL) {
+        InOrder(root->left);
+        cout << root->info << " - ";
+        InOrder(root->right);
+    }
+}
+
+// Urutan: Root -> Kiri -> Kanan
+void PreOrder(address root) {
+    if (root != NULL) {
+        cout << root->info << " - "; 
+        PreOrder(root->left);        
+        PreOrder(root->right);       
+    }
+}
+
+// Urutan: Kiri -> Kanan -> Root
+void PostOrder(address root) {
+    if (root != NULL) {
+        PostOrder(root->left);       
+        PostOrder(root->right);      
+        cout << root->info << " - "; 
+    }
+}
+
+
+int main()
+{
+    cout << "Hello world!" << endl;
+    
+    address root = NULL;
+
+    insertNode(1, root);
+    insertNode(2, root);
+    insertNode(6, root);
+    insertNode(4, root);
+    insertNode(5, root);
+    insertNode(3, root);
+    insertNode(7, root); // 6 diabaikan karena duplikat
+
+
+    cout << "\n--- Traversal ---" << endl;
+    
+    cout << "InOrder  : ";
+    InOrder(root); 
     cout << endl;
-}
 
-int main() {
-    cout << "ALTERNATIF 3" << endl;
-    Queue Q;
-    createQueue(Q);
-    printInfo(Q);
-    enqueue(Q, 5); printInfo(Q);
-    enqueue(Q, 2); printInfo(Q);
-    enqueue(Q, 7); printInfo(Q);
-    dequeue(Q);    printInfo(Q);
-    enqueue(Q, 4); printInfo(Q);
-    dequeue(Q);    printInfo(Q);
-    dequeue(Q);    printInfo(Q);
+    cout << "PreOrder : ";
+    PreOrder(root);
+    cout << endl;
+    
+    cout << "PostOrder: ";
+    PostOrder(root);
+    cout << "\n" << endl;
+
+
+    cout << "kedalaman : " << hitungKedalaman(root) << endl; 
+    cout << "jumlah node : " << hitungNode(root) << endl;
+    cout << "total : " << hitungTotalInfo(root) << endl;
+
     return 0;
 }
 ```
@@ -387,9 +464,9 @@ int main() {
 > Output
 > ![output](output/un3.png)
 
-Pada program di atas kita disuruh untuk membuat queue untuk alternatif 3 dimana head dan tail berputar. Kita membuat sebuah struck dimana kita Menyimpan data pada info[5], dengan head (depan) dan tail (belakang), buat fungsi createQueue, enqueue,dequeue, dan printQueue. cek apakah queue kosong atau full menggunakan boolean, pada alt ini queue dianggap penuh jika (tail + 1) % 5 sama dengan head. Untuk dequeue dan enqueue Pergerakan head dan tail menggunakan operasi modulo (% 5). Jika tail atau head mencapai batas array, mereka akan kembali ke indeks 0.
+Program diatas persis seperti program sebeliumnya hanya kita harus menambahkan print tree secara pre-order dan post-order. Fungsi tambahan yaitu PreOrder dan PostOrder dengan urutan root->kiri->kanan.
 
-lalu pada fungsi main kita jalankan data dummy.
+fungsi tersebut kita panggil pada fungsi mainnya.
 
 ## Referensi
 
