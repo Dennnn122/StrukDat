@@ -1,9 +1,10 @@
-# <h1 align="center">Laporan Praktikum Modul 8 <br> Queue</h1>
+# <h1 align="center">Laporan Praktikum Modul 10 <br> Tree</h1>
 <p align="center">DENNA WAHYU SETYOBUDI - 103112430206</p>
 
 ## Dasar Teori
 
-Pada materi ini menjelaskan tentang Queue. Queue atau dalam bahasa Indonesia yang berarti antrean adalah struktur data yang menyusun elemen-elemen data dalam urutan linier. Prinsip dasar dari struktur data ini adalah “First In, First Out” (FIFO) yang berarti elemen data yang pertama dimasukkan ke dalam antrean akan menjadi yang pertama pula untuk dikeluarkan.
+Pada materi ini menjelaskan tentang Tree. Tree adalah struktur data hierarkis yang digunakan untuk mengatur dan merepresentasikan data dalam hubungan induk-anak .
+Tree terdiri dari simpul-simpul, dengan simpul teratas disebut akar , dan setiap simpul lainnya dapat memiliki satu atau lebih simpul anak .
 
 ## Guided
 
@@ -392,4 +393,4 @@ lalu pada fungsi main kita jalankan data dummy.
 
 ## Referensi
 
-1.https://www.dicoding.com/blog/struktur-data-queue-pengertian-fungsi-dan-jenisnya/ (diakses /12/2025)
+1.https://www.geeksforgeeks.org/dsa/introduction-to-tree-data-structure/ (diakses 8/12/2025)
