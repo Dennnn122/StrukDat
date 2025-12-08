@@ -14,96 +14,176 @@ Tree terdiri dari simpul-simpul, dengan simpul teratas disebut akar , dan setiap
 #include <iostream>
 using namespace std;
 
-#define MAX 5 // ukuran maksimal queue
-
-//struktur queue
-struct Queue {
-    int data[MAX];
-    int head;
-    int tail;
+struct Node {
+   int data;
+   Node *kiri, *kanan;
 };
 
-//membuat antrean kososng
-void createQueue(Queue &Q){
-    Q.head = -1;
-    Q.tail =-1;
-}
-//mengecek apakah queue kosong
-bool isEmpty(Queue Q) {
-    return (Q.head == -1 && Q.tail ==-1);
-}
-//menegecek apkaah queue penuh
-bool isFull(Queue Q) {
-    return (Q.tail == MAX - 1);
-}
-//menapilkan isi antrean
-void printQueue(Queue Q) {
-    if (isEmpty(Q)) {
-        cout << "Queue kososng!" << endl;
-    } else {
-        cout <<"Queue :";
-        for (int i = Q.head; i <= Q.tail; i++) {
-            cout << Q.data[i] << "";
-        }
-        cout << endl;
-    }
+// bikin node baru
+Node *membuat_node(int data) {
+   Node *node_baru = new Node();
+   node_baru->data = data;  
+   node_baru->kiri = node_baru->kanan = NULL;
+   return node_baru;
 }
 
-//menambah elemen ke dalam antrian (Enqueue)
-void enqueue(Queue &Q, int x) {
-    if (isFull(Q)) {
-        cout << "Queue penuh! tidak bisa menambah data." << endl;
-    } else {
-        if (isEmpty(Q)) {
-            Q.head = Q.tail = 0;
-        } else {
-            Q.tail++;
-        }
-        Q.data[Q.tail] = x;
-        cout << "Enqueue:" <<x << endl;
-    }
+Node *insert(Node *root, int nilai) {
+   if (root == NULL) {
+      return membuat_node(nilai);
+   }
+   if (nilai < root->data) {
+      // rekursif ke kiri
+      root->kiri = insert(root->kiri, nilai);
+   }
+   else if (nilai > root->data) {
+      // rekursif ke kanan
+      root->kanan = insert(root->kanan, nilai);
+   }
+
+   return root;   // mengembalikan root agar struktur tetap utuh
 }
 
-//menghapus ekemen dari antrean (Dequeue)
-void dequeue(Queue &Q) {
-    if (isEmpty(Q)) {
-        cout << "Queue kosong! tidak ada data yang dihapus << endl";
-    } else {
-        cout << "Dequeue:" << Q.data[Q.head]<< endl;
-        // jika hanya 1 elemen
-        if (Q.head == Q.tail) {
-            Q.head = Q.tail =-1;
-        } else {
-            //geser semua elemen ke kiri
-            for (int i = Q.head; i< Q.tail; i++){
-                Q.data[i] = Q.data[i+1];}
-            }
-            Q.tail--;
-        } 
-    }
+Node *search(Node *root, int nilai) {
+   if (root == NULL || root->data == nilai) {
+      return root;  
+   }
+   if (nilai < root->data) {
+      return search(root->kiri, nilai);   
+   }
+   return search(root->kanan, nilai);     
+}
 
-//program utama 
-int main(){
-    Queue Q;
-    createQueue(Q);
+Node *nilai_terkecil(Node *root) {
+   Node *sekarang = root;
+   while (sekarang && sekarang->kiri != NULL) {
+      sekarang = sekarang->kiri;   // geser terus ke kiri buat cari nilai paling kecil
+   }
+   return sekarang; 
+}
 
-    enqueue(Q, 5);
-    enqueue(Q, 2);
-    enqueue(Q, 7);
-    printQueue(Q);
+Node *hapus(Node *root, int nilai) {
+   if (root == NULL) {
+      return root;  
+   }
+   if (nilai < root->data) {
+      root->kiri = hapus(root->kiri, nilai);   // hapus dari subtree kiri
+   } else if (nilai > root->data) {
+      root->kanan = hapus(root->kanan, nilai); // hapus dari subtree kanan
+   } else {
+      if (root->kiri == NULL) {
+         Node *sementara = root->kanan;
+         delete root;        
+         return sementara;   
+      }
+      else if (root->kanan == NULL) {
+         Node *sementara = root->kiri;
+         delete root;        
+         return sementara;   
+      }
+      Node *sementara = nilai_terkecil(root->kanan);
+      root->data = sementara->data;     
+      root->kanan = hapus(root->kanan, sementara->data); 
+   }
+   return root;  
+}
 
-    dequeue(Q);
-    printQueue(Q);
+Node *update(Node *root, int lama, int baru) {
+   if (search(root, lama) != NULL) {
+      root = hapus(root, lama);   
+      root = insert(root, baru);  
+      cout << "data " << lama << " diganti jadi " << baru << endl;
+   }
+   else {
+      cout << "data " << lama << " ngga ketemu" << endl;
+   }
+   return root;
+}
 
-    enqueue(Q, 4);
-    enqueue(Q, 9);
-    printQueue(Q);
 
-    dequeue(Q);
-    dequeue(Q);
-    printQueue(Q);
+void pre_order(Node *root) {
+   if (root != NULL) {
+      cout << root->data << " ";   
+      pre_order(root->kiri);       
+      pre_order(root->kanan);      
+   }
+}
 
-    return 0;
+void in_order(Node *root) {
+   if (root != NULL) {
+      in_order(root->kiri);         
+      cout << root->data << " ";    
+      in_order(root->kanan);        
+   }
+}
+
+void post_order(Node *root) {
+   if (root != NULL) {
+      post_order(root->kiri);     
+      post_order(root->kanan);    
+      cout << root->data << " ";  // tampilkan data paling terakhir
+   }
+}
+
+int main() {
+   Node *root = NULL;
+
+   cout << "=== 1. insert data ===" << endl;
+   root = insert(root, 10);
+   insert(root, 5);
+   insert(root, 20);
+   insert(root, 3);
+   insert(root, 7);
+   insert(root, 15);
+   insert(root, 25);
+   cout << "data berhasil dimasukkan!" << endl;
+
+   cout << "\n=== 2. traversal tree ===" << endl;
+   cout << "pre-order : ";
+   pre_order(root);
+   cout << endl;
+   cout << "in-order  : ";
+   in_order(root);
+   cout << endl;
+   cout << "post-order: ";
+   post_order(root);
+   cout << endl;
+
+   cout << "\n=== 3. search data ===" << endl;
+   int cari1 = 7, cari2 = 99;
+   cout << "mencari " << cari1 << ": " << (search(root, cari1) ? "ketemu" : "ngga ketemu") << endl;
+   cout << "mencari " << cari2 << ": " << (search(root, cari2) ? "ketemu" : "ngga ketemu") << endl;
+   cout << endl;
+
+   cout << "=== 4. update data ===" << endl;
+   root = update(root, 5, 8);
+   cout << "in-order setelah update: ";
+   in_order(root);  
+   cout << endl;
+
+   cout << "pre-order : ";
+   pre_order(root);
+   cout << endl;
+   cout << "in-order  : ";
+   in_order(root);
+   cout << endl;
+   cout << "post-order: ";
+   post_order(root);
+   cout << endl;
+
+   cout << "\n=== 5. delete data ===" << endl;
+   cout << "menghapus 20" << endl;
+   root = hapus(root, 20);
+
+   cout << "pre-order : ";
+   pre_order(root);
+   cout << endl;
+   cout << "in-order  : ";
+   in_order(root);
+   cout << endl;
+   cout << "post-order: ";
+   post_order(root);
+   cout << endl;
+   return 0;
 }
 ```
 > Output
