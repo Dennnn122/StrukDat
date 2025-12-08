@@ -116,13 +116,159 @@ int main(){
 
 buatlah single linked list untuk Antrian yang menyimpan data pembeli( nama dan pesanan). program memiliki beberapa menu seperti tambah antrian,  layani antrian(hapus), dan tampilkan antrian. \*antrian pertama harus yang pertama dilayani
 ```go
+#include <iostream>
+using namespace std;
 
+const int MAX = 20;
+
+struct Stack {
+    int info[MAX];
+    int top;
+};
+
+void createStack(Stack &S) {
+    S.top = -1;
+}
+
+bool isFull(Stack S) {
+    return S.top == MAX - 1;
+}
+
+bool isEmpty(Stack S) {
+    return S.top == -1;
+}
+
+void push(Stack &S, int x) {
+    if (isFull(S)) {
+        cout << "Stack penuh!\n";
+    } else {
+        S.top++;
+        S.info[S.top] = x;
+    }
+}
+
+int pop(Stack &S) {
+    if (isEmpty(S)) {
+        cout << "Stack kosong!\n";
+        return -1;
+    } else {
+        int x = S.info[S.top];
+        S.top--;
+        return x;
+    }
+}
+
+void printInfo(Stack S) {
+    if (isEmpty(S)) {
+        cout << "Stack kosong.\n";
+    } else {
+        cout << "[TOP] ";
+        for (int i = S.top; i >= 0; i--) {
+            cout << S.info[i] << " ";
+        }
+        cout << endl;
+    }
+}
+
+void balikStack(Stack &S) {
+    Stack temp;
+    createStack(temp);
+
+    while (!isEmpty(S)) {
+        int x = pop(S);
+        push(temp, x);
+    }
+    S = temp;
+}
+
+void pushAscending(Stack &S, int x) {
+    if (isFull(S)) {
+        cout << "Stack penuh!\n";
+        return;
+    }
+
+    Stack temp;
+    createStack(temp);
+
+    // Pindahkan elemen lebih kecil dari x ke stack sementara
+    while (!isEmpty(S) && S.info[S.top] < x) {
+        push(temp, pop(S));
+    }
+
+    // Masukkan elemen baru
+    push(S, x);
+
+    // Kembalikan elemen dari stack sementara
+    while (!isEmpty(temp)) {
+        push(S, pop(temp));
+    }
+}
+
+// Membaca karakter satu per satu hingga user menekan Enter
+void getInputStream(Stack &S) {
+    cout << "Masukkan karakter (tekan ENTER untuk berhenti): ";
+    char c;
+    while (true) {
+        c = cin.get();  // baca 1 karakter
+        if (c == '\n') break; // berhenti jika enter
+        if (!isFull(S))
+            push(S, c - '0'); // ubah char ke angka
+    }
+}
+
+
+int main() {
+    cout << "Hello world!\n";
+
+    Stack S;
+    createStack(S);
+
+    push(S, 3);
+    push(S, 4);
+    push(S, 8);
+    pop(S);
+    push(S, 2);
+    push(S, 3);
+    pop(S);
+    push(S, 9);
+
+    printInfo(S);
+
+    cout << "balik stack\n";
+    balikStack(S);
+    printInfo(S);
+
+    cout << "\n\n=== PUSH ASCENDING ===\n";
+    createStack(S);
+    pushAscending(S, 3);
+    pushAscending(S, 4);
+    pushAscending(S, 8);
+    pushAscending(S, 2);
+    pushAscending(S, 3);
+    pushAscending(S, 9);
+    printInfo(S);
+    cout << "balik stack\n";
+    balikStack(S);
+    printInfo(S);
+
+    cout << "\n\n=== INPUT STREAM ===\n";
+    createStack(S);
+    cin.ignore(); 
+    getInputStream(S);
+    printInfo(S);
+    cout << "balik stack\n";
+    balikStack(S);
+    printInfo(S);
+
+    return 0;
+}
 
 ```
 
 > Output
 > ![output](output/un1.png)
 
+Pada program di atas, kita membuat sebuah adt stack, kita membuat serbuah struck berisi info[max] untuk menyimpan array dan top untuk menunjuk posisi data paling atas. kita juga memiliki beberapa fungsi yaitu kita membuat sebuah fungsi untuk menginisialisasi stack tsb, lalu kita mengecek kondisi stack menggunakan variabel boolean, lalu membuat sebuah fungsi untuk menambahkan dan mennghapus data, serta menampilkan isi,reverse, push ascending dan get input
 
 ## Referensi
 
