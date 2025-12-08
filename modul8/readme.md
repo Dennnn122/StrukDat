@@ -230,7 +230,7 @@ bool isEmptyQueue(Queue Q) {
 }
 
 bool isFullQueue(Queue Q) {
-    return Q.tail == 4; // Penuh jika tail di ujung array
+    return Q.tail == 4; // Penuh jika tail mentok kanan
 }
 
 void enqueue(Queue &Q, infotype x) {
@@ -240,11 +240,10 @@ void enqueue(Queue &Q, infotype x) {
         if (isEmptyQueue(Q)) {
             Q.head = 0;
             Q.tail = 0;
-            Q.info[0] = x;
         } else {
-            Q.tail++;
-            Q.info[Q.tail] = x;
+            Q.tail++; // Tail maju
         }
+        Q.info[Q.tail] = x;
     }
 }
 
@@ -254,15 +253,11 @@ infotype dequeue(Queue &Q) {
         cout << "Queue Empty" << endl;
     } else {
         val = Q.info[Q.head];
-        if (Q.head == Q.tail) { // Sisa 1 elemen
+        if (Q.head == Q.tail) {
             Q.head = -1;
             Q.tail = -1;
         } else {
-            // Head tetap di 0, elemen belakang maju ke depan
-            for (int i = 0; i < Q.tail; i++) {
-                Q.info[i] = Q.info[i + 1];
-            }
-            Q.tail--; // Tail mundur
+            Q.head++; // Head maju ke kanan (Index bertambah)
         }
     }
     return val;
@@ -278,14 +273,14 @@ void printInfo(Queue Q) {
 }
 
 int main() {
-    cout << "ALTERNATIF 1" << endl;
+    cout << "ALTERNATIF 2" << endl;
     Queue Q;
     createQueue(Q);
     printInfo(Q);
     enqueue(Q, 5); printInfo(Q);
     enqueue(Q, 2); printInfo(Q);
     enqueue(Q, 7); printInfo(Q);
-    dequeue(Q);    printInfo(Q);
+    dequeue(Q);    printInfo(Q); 
     enqueue(Q, 4); printInfo(Q);
     dequeue(Q);    printInfo(Q);
     dequeue(Q);    printInfo(Q);
@@ -294,7 +289,7 @@ int main() {
 ```
 
 > Output
-> ![output](output/un1.png)
+> ![output](output/un2.png)
 
 Pada program di atas kita disuruh untuk membuat queue untuk alternatif 2 dimana head bergerak,tail bergerak. Kita membuat sebuah struck dimana kita Menyimpan data pada info[5], dengan head (depan) dan tail (belakang), buat fungsi createQueue, enqueue,dequeue, dan printQueue. cek apakah queue kosong atau full menggunakan boolean, pada alt ini queue dianggap penuh jika tail mencapai indeks terakhir (4). Untuk dequeue Data di head diambil, dan head langsung ditambah 1. Tidak ada pergeseran elemen.
 
@@ -323,7 +318,8 @@ bool isEmptyQueue(Queue Q) {
 }
 
 bool isFullQueue(Queue Q) {
-    return Q.tail == 4; // Penuh jika tail di ujung array
+    // Penuh jika langkah selanjutnya dari tail adalah head
+    return ((Q.tail + 1) % 5 == Q.head);
 }
 
 void enqueue(Queue &Q, infotype x) {
@@ -333,11 +329,10 @@ void enqueue(Queue &Q, infotype x) {
         if (isEmptyQueue(Q)) {
             Q.head = 0;
             Q.tail = 0;
-            Q.info[0] = x;
         } else {
-            Q.tail++;
-            Q.info[Q.tail] = x;
+            Q.tail = (Q.tail + 1) % 5;
         }
+        Q.info[Q.tail] = x;
     }
 }
 
@@ -347,15 +342,11 @@ infotype dequeue(Queue &Q) {
         cout << "Queue Empty" << endl;
     } else {
         val = Q.info[Q.head];
-        if (Q.head == Q.tail) { // Sisa 1 elemen
+        if (Q.head == Q.tail) {
             Q.head = -1;
             Q.tail = -1;
         } else {
-            // Head tetap di 0, elemen belakang maju ke depan
-            for (int i = 0; i < Q.tail; i++) {
-                Q.info[i] = Q.info[i + 1];
-            }
-            Q.tail--; // Tail mundur
+            Q.head = (Q.head + 1) % 5;
         }
     }
     return val;
@@ -363,15 +354,21 @@ infotype dequeue(Queue &Q) {
 
 void printInfo(Queue Q) {
     cout << " " << Q.head << " - " << Q.tail << "\t | ";
-    if (isEmptyQueue(Q)) cout << "empty queue";
-    else {
-        for (int i = Q.head; i <= Q.tail; i++) cout << Q.info[i] << " ";
+    if (isEmptyQueue(Q)) {
+        cout << "empty queue";
+    } else {
+        int i = Q.head;
+        while (i != Q.tail) {
+            cout << Q.info[i] << " ";
+            i = (i + 1) % 5;
+        }
+        cout << Q.info[i] << " "; // Print elemen terakhir
     }
     cout << endl;
 }
 
 int main() {
-    cout << "ALTERNATIF 1" << endl;
+    cout << "ALTERNATIF 3" << endl;
     Queue Q;
     createQueue(Q);
     printInfo(Q);
@@ -387,7 +384,7 @@ int main() {
 ```
 
 > Output
-> ![output](output/un1.png)
+> ![output](output/un3.png)
 
 Pada program di atas kita disuruh untuk membuat queue untuk alternatif 3 dimana head dan tail berputar. Kita membuat sebuah struck dimana kita Menyimpan data pada info[5], dengan head (depan) dan tail (belakang), buat fungsi createQueue, enqueue,dequeue, dan printQueue. cek apakah queue kosong atau full menggunakan boolean, pada alt ini queue dianggap penuh jika (tail + 1) % 5 sama dengan head. Untuk dequeue dan enqueue Pergerakan head dan tail menggunakan operasi modulo (% 5). Jika tail atau head mencapai batas array, mereka akan kembali ke indeks 0.
 
