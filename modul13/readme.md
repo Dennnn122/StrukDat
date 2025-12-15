@@ -127,7 +127,7 @@ int main()
 > Output
 > ![output](output/g1.png)
 
-Pada perogram diatas kita membuat sebuah implementasi Multi Linked List, buat struct ChildNode berisi string info dan pointer next, serta buat struct ParentNode berisi string info, pointer ke childHead sebagai anak pertama dan pointer next. Kita buat fungsi fungsinya yaitu createParent, createChild, insertParent,insertChild, printAll
+Pada progeam diatas kita membuat sebuah implementasi Multi Linked List, buat struct ChildNode berisi string info dan pointer next, serta buat struct ParentNode berisi string info, pointer ke childHead sebagai anak pertama dan pointer next. Kita buat fungsi fungsinya yaitu createParent, createChild, insertParent,insertChild, printAll
 
 Lalu kita buat fungsi main nya kita buat list kososng setelahnya kita masukan data dummy 
 
@@ -615,7 +615,222 @@ int main() {
 ### soal 2
 
 ```go
+#include <iostream>
+#include <string>
 
+using namespace std;
+
+struct mahasiswa {
+    string nama;
+    string nim;
+    char jenis_kelamin;
+    float ipk;
+};
+
+typedef mahasiswa infotype;
+typedef struct ElmList *address;
+
+struct ElmList {
+    infotype info;
+    address next;
+};
+
+struct List {
+    address first;
+};
+
+void createList(List &L) {
+    L.first = NULL;
+}
+
+address alokasi(infotype x) {
+    address P = new ElmList;
+    P->info = x;
+    P->next = NULL;
+    return P;
+}
+
+void dealokasi(address P) {
+    delete P;
+}
+
+void insertFirst(List &L, address P) {
+    if (L.first == NULL) {
+        L.first = P;
+        P->next = L.first; 
+    } else {
+        address last = L.first;
+        while (last->next != L.first) {
+            last = last->next;
+        }
+        P->next = L.first;
+        last->next = P;
+        L.first = P;
+    }
+}
+
+void insertAfter(List &L, address Prec, address P) {
+    if (Prec != NULL) {
+        P->next = Prec->next;
+        Prec->next = P;
+    }
+}
+
+void insertLast(List &L, address P) {
+    if (L.first == NULL) {
+        L.first = P;
+        P->next = L.first;
+    } else {
+        address last = L.first;
+        while (last->next != L.first) {
+            last = last->next;
+        }
+        last->next = P;     
+        P->next = L.first;  
+    }
+}
+
+void deleteFirst(List &L, address &P) {
+    if (L.first == NULL) {
+        P = NULL;
+    } else if (L.first->next == L.first) {
+        P = L.first;
+        L.first = NULL;
+    } else {
+        address last = L.first;
+        while (last->next != L.first) {
+            last = last->next;
+        }
+        P = L.first;
+        L.first = L.first->next; 
+        last->next = L.first;    
+        P->next = NULL;
+    }
+}
+
+void deleteLast(List &L, address &P) {
+    if (L.first == NULL) {
+        P = NULL;
+    } else if (L.first->next == L.first) { 
+        P = L.first;
+        L.first = NULL;
+    } else {
+        address last = L.first;
+        address prevLast = NULL;
+        while (last->next != L.first) {
+            prevLast = last;
+            last = last->next;
+        }
+        P = last;
+        prevLast->next = L.first;
+        P->next = NULL;
+    }
+}
+
+void deleteAfter(List &L, address Prec, address &P) {
+    if (Prec != NULL && Prec->next != L.first) {
+        P = Prec->next;
+        Prec->next = P->next;
+        P->next = NULL;
+    } else if (Prec->next == L.first) {
+        deleteFirst(L, P); 
+    }
+}
+
+// Mencari elemen berdasarkan NIM
+address findElm(List L, infotype x) {
+    if (L.first == NULL) return NULL;
+
+    address P = L.first;
+    do {
+        if (P->info.nim == x.nim) {
+            return P;
+        }
+        P = P->next;
+    } while (P != L.first); // Berhenti jika sudah kembali ke awal
+
+    return NULL;
+}
+
+// Menampilkan info list
+void printInfo(List L) {
+    if (L.first == NULL) {
+        cout << "List Kosong" << endl;
+    } else {
+        address P = L.first;
+        do {
+            cout << "Nama : " << P->info.nama << endl;
+            cout << "NIM  : " << P->info.nim << endl;
+            cout << "L/P  : " << P->info.jenis_kelamin << endl;
+            cout << "IPK  : " << P->info.ipk << endl;
+            cout << " " << endl;
+            P = P->next;
+        } while (P != L.first);
+    }
+}
+
+// Fungsi Helper sesuai soal untuk membungkus alokasi
+address createData(string nama, string nim, char jenis_kelamin, float ipk) {
+    infotype x;
+    address P;
+    x.nama = nama;
+    x.nim = nim;
+    x.jenis_kelamin = jenis_kelamin;
+    x.ipk = ipk;
+    P = alokasi(x);
+    return P;
+}
+
+int main() {
+    List L;
+    address P1 = NULL;
+    address P2 = NULL;
+    infotype x;
+
+    createList(L);
+
+    cout << " Coba insert first, last, dan after " << endl << endl;
+
+    P1 = createData("Danu", "04", 'l', 4.0);
+    insertFirst(L, P1);
+
+    P1 = createData("Fahmi", "06", 'l', 3.45);
+    insertLast(L, P1);
+
+    P1 = createData("Bobi", "02", 'l', 3.71);
+    insertFirst(L, P1);
+
+    P1 = createData("Ali", "01", 'l', 3.3);
+    insertFirst(L, P1);
+
+    P1 = createData("Gita", "07", 'p', 3.75);
+    insertLast(L, P1);
+
+    x.nim = "07";
+    P1 = findElm(L, x);
+    if (P1 != NULL) {
+        P2 = createData("Cindi", "03", 'p', 3.5);
+        insertAfter(L, P1, P2);
+    }
+
+    x.nim = "02";
+    P1 = findElm(L, x);
+    if (P1 != NULL) {
+        P2 = createData("Hilmi", "08", 'l', 3.3); 
+        insertAfter(L, P1, P2);
+    }
+
+    x.nim = "04";
+    P1 = findElm(L, x);
+    if (P1 != NULL) {
+        P2 = createData("Eli", "05", 'p', 3.4);
+        insertAfter(L, P1, P2);
+    }
+
+    printInfo(L);
+
+    return 0;
+}
 ```
 > Output
 > ![output](output/un2.png)
