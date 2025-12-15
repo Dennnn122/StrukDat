@@ -254,8 +254,10 @@ int main()
 > Output
 > ![output](output/g1.png)
 
-Pada perogram diatas 
-Lalu kita buat fungsi main nya kita buat list kososng setelahnya kita masukan data dummy 
+Pada perogram diatas kita membuat sebuah graph,kita membuat struct elmNode, struct elmEdge dan struct Graph pada satu file yaitu graf.h, dan kita panggil fungsi fungsi yang kita buat. 
+Buat fungsi createGraph,allocateNode,allocateEdge,insertNode,connectNode,printInfoGraph,resetVisited,printDFS,printBFS pada file graf.cpp
+
+Lalu kita buat fungsi main nya kita inisiasi graph serta masukan data dummy dan jalankan fungsi tersebut.
 
 ## Unguided
 
@@ -408,6 +410,12 @@ int main() {
 
 > Output
 > ![output](output/un1.png)
+
+Pada perogram diatas kita membuat sebuah graph,kita membuat struct elmNode, struct elmEdge dan struct Graph
+
+Buat fungsi createGraph,findNode,insertNode,connectNode,printInfoGraph
+
+Lalu kita buat fungsi main nya kita inisiasi graph serta masukan data dummy dan jalankan fungsi tersebut.
 
 ### soal 2
 
@@ -580,6 +588,11 @@ int main() {
 > Output
 > ![output](output/un2.png)
 
+Pada perogram diatas kita membuat sebuah graph,kita membuat struct elmNode, struct elmEdge dan struct Graph
+
+Buat fungsi createGraph,findNode,insertNode,connectNode,printInfoGraph,resetVisited,printDFS
+
+Lalu kita buat fungsi main nya kita inisiasi graph serta masukan data dummy dan jalankan fungsi tersebut.
 
 ### soal 3
 
@@ -728,6 +741,11 @@ int main() {
 > Output
 > ![output](output/un3.png)
 
+Pada perogram diatas kita membuat sebuah graph,kita membuat struct elmNode, struct elmEdge dan struct Graph
+
+Buat fungsi createGraph,findNode,insertNode,connectNode,printInfoGraph,resetVisited,printBFS
+
+Lalu kita buat fungsi main nya kita inisiasi graph serta masukan data dummy dan jalankan fungsi tersebut.
 
 ## Referensi
 
