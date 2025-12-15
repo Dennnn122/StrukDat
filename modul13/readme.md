@@ -612,6 +612,10 @@ int main() {
 > Output
 > ![output](output/un1.png)
 
+Pada progeam diatas kita membuat sebuah implementasi Multi Linked List, buat struct ChildNode berisi string info dan pointer next, serta buat struct ParentNode berisi string info, pointer ke childHead sebagai anak pertama dan pointer next. Kita buat fungsi fungsinya yaitu createParent, createChild, insertParent,insertChild, printAll
+
+Lalu kita buat fungsi main nya kita buat list kososng setelahnya kita masukan data dummy 
+
 ### soal 2
 
 ```go
@@ -834,6 +838,10 @@ int main() {
 ```
 > Output
 > ![output](output/un2.png)
+
+Pada progeam diatas kita membuat sebuah implementasi Multi Linked List, buat struct ChildNode berisi string info dan pointer next, serta buat struct ParentNode berisi string info, pointer ke childHead sebagai anak pertama dan pointer next. Kita buat fungsi fungsinya yaitu createParent, createChild, insertParent,insertChild, printAll
+
+Lalu kita buat fungsi main nya kita buat list kososng setelahnya kita masukan data dummy 
 
 ## Referensi
 
